@@ -1,9 +1,17 @@
+-- drop table exp.transaction cascade;
+-- drop table exp.person_category cascade;
+-- drop table exp.country cascade;
+-- drop table exp.role_person cascade;
+-- drop table exp.person cascade;
+-- drop table exp.role cascade;
+
 CREATE TABLE exp.country (
  ctr_id SERIAL PRIMARY KEY,
  ctr_acronym VARCHAR(2),
  ctr_name VARCHAR(200),
  ctr_icon BYTEA,
  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+ modified_at TIMESTAMP,
  is_delete BOOLEAN NOT NULL DEFAULT false
 );
 
@@ -11,6 +19,7 @@ CREATE TABLE exp.role (
   rol_id SERIAL PRIMARY KEY,
   rol_name VARCHAR(50) NOT NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  modified_at TIMESTAMP,
   is_delete BOOLEAN NOT NULL DEFAULT false
 );
 
@@ -24,6 +33,7 @@ CREATE TABLE exp.person (
     per_last_access TIMESTAMP,
     ctr_id INTEGER NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    modified_at TIMESTAMP,
     is_delete BOOLEAN NOT NULL DEFAULT false,
     FOREIGN KEY (ctr_id) REFERENCES exp.country (ctr_id)
 );
@@ -36,6 +46,7 @@ CREATE TABLE exp.role_person (
   rop_start_date TIMESTAMP NOT NULL,
   rop_end_date TIMESTAMP,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  modified_at TIMESTAMP,
   is_delete BOOLEAN NOT NULL DEFAULT false,
   FOREIGN KEY (rol_id) REFERENCES exp.role (rol_id),
   FOREIGN KEY (per_id) REFERENCES exp.person (per_id)
@@ -48,6 +59,7 @@ CREATE TABLE exp.person_category (
   cat_editable BOOLEAN NOT NULL DEFAULT true,
   per_id INTEGER,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  modified_at TIMESTAMP,
   is_delete BOOLEAN NOT NULL DEFAULT false,
   FOREIGN KEY (per_id) REFERENCES exp.person (per_id)
 );
@@ -55,7 +67,7 @@ CREATE TABLE exp.person_category (
 CREATE TABLE exp.transaction (
   trn_id SERIAL PRIMARY KEY,
   trn_uuid UUID NOT NULL,
-  trn_date TIMESTAMP,
+  trn_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   trn_month_reference INTEGER NOT NULL,
   trn_description VARCHAR NOT NULL,
   trn_amount NUMERIC(10,3) NOT NULL,

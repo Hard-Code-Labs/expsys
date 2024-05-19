@@ -1,35 +1,35 @@
 -- Inserts para la tabla exp.country
-INSERT INTO exp.country (ctr_acronym, ctr_name, created_at, is_delete)
+INSERT INTO exp.country (ctr_acronym, ctr_name, created_at,modified_at, is_delete)
 VALUES
-       ('EC', 'Ecuador', CURRENT_TIMESTAMP, false);
+       ('EC', 'Ecuador', CURRENT_TIMESTAMP,null, false);
 
 -- Inserts para la tabla exp.role
-INSERT INTO exp.role (rol_name, created_at, is_delete)
+INSERT INTO exp.role (rol_name, created_at,modified_at, is_delete)
 VALUES
-       ('ADMIN', CURRENT_TIMESTAMP, false),
-       ('USER', CURRENT_TIMESTAMP, false);
+       ('ADMIN', CURRENT_TIMESTAMP,null, false),
+       ('USER', CURRENT_TIMESTAMP, null,false);
 
 -- Inserts para la tabla exp.person
-INSERT INTO exp.person (per_uuid, per_mail, per_name, per_lastname, per_password, per_last_access, ctr_id, created_at, is_delete)
+INSERT INTO exp.person (per_uuid, per_mail, per_name, per_lastname, per_password, per_last_access, ctr_id, created_at, modified_at,is_delete)
 VALUES ('e8f1d4de-1919-4fc5-8c0a-bff4ad19e101',
-        'teban.es@outlook.com', 'Tebo', 'stancamino', 'password123', null, 1, CURRENT_TIMESTAMP, false);
+        'teban.es@outlook.com', 'Tebo', 'stancamino', 'password123', null, 1, CURRENT_TIMESTAMP, null,false);
 
 
 -- Inserts para la tabla exp.role_person
-INSERT INTO exp.role_person (rol_id, per_id, rop_active, rop_start_date, created_at, is_delete)
-VALUES (1, 1, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, false);
+INSERT INTO exp.role_person (rol_id, per_id, rop_active, rop_start_date, created_at, modified_at,is_delete)
+VALUES (1, 1, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP,null, false);
 
 -- Common categories
-INSERT INTO exp.person_category (cat_name, cat_type, cat_editable, per_id, created_at, is_delete)
+INSERT INTO exp.person_category (cat_name, cat_type, cat_editable, per_id, created_at,modified_at, is_delete)
 VALUES
-      ('Education', 'E', true, null, CURRENT_TIMESTAMP, false),
-      ('Food', 'E', true, null, CURRENT_TIMESTAMP, false);
+      ('Education', 'E', true, null, CURRENT_TIMESTAMP,null, false),
+      ('Food', 'E', true, null, CURRENT_TIMESTAMP,null, false);
 
 -- Categories for me
-INSERT INTO exp.person_category (cat_name, cat_type, cat_editable, per_id, created_at, is_delete)
+INSERT INTO exp.person_category (cat_name, cat_type, cat_editable, per_id, created_at,modified_at, is_delete)
 VALUES
-    ('Salary', 'I', true, 1, CURRENT_TIMESTAMP, false),
-    ('Concerts', 'E', true, 1, CURRENT_TIMESTAMP, false);
+    ('Salary', 'I', true, 1, CURRENT_TIMESTAMP, null,false),
+    ('Concerts', 'E', true, 1, CURRENT_TIMESTAMP,null, false);
 
 -- Inserts para la tabla exp.transaction
 INSERT INTO exp.transaction (trn_uuid, trn_date, trn_month_reference, trn_description, trn_amount, cat_id, per_id, is_delete)
