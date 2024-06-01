@@ -1,11 +1,11 @@
--- drop table exp.transaction cascade;
--- drop table exp.person_category cascade;
--- drop table exp.country cascade;
--- drop table exp.role_person cascade;
--- drop table exp.person cascade;
--- drop table exp.role cascade;
+-- drop table exp.exp_transaction cascade;
+-- drop table exp.exp_person_category cascade;
+-- drop table exp.exp_country cascade;
+-- drop table exp.exp_role_person cascade;
+-- drop table exp.exp_person cascade;
+-- drop table exp.exp_role cascade;
 
-CREATE TABLE exp.country (
+CREATE TABLE exp.exp_country (
  ctr_id SERIAL PRIMARY KEY,
  ctr_acronym VARCHAR(2),
  ctr_name VARCHAR(200),
@@ -15,7 +15,7 @@ CREATE TABLE exp.country (
  is_delete BOOLEAN NOT NULL DEFAULT false
 );
 
-CREATE TABLE exp.role (
+CREATE TABLE exp.exp_role (
   rol_id SERIAL PRIMARY KEY,
   rol_name VARCHAR(50) NOT NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -23,7 +23,7 @@ CREATE TABLE exp.role (
   is_delete BOOLEAN NOT NULL DEFAULT false
 );
 
-CREATE TABLE exp.person (
+CREATE TABLE exp.exp_person (
     per_id SERIAL PRIMARY KEY,
     per_uuid UUID NOT NULL,
     per_mail VARCHAR(100) NOT NULL,
@@ -35,10 +35,10 @@ CREATE TABLE exp.person (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     modified_at TIMESTAMP,
     is_delete BOOLEAN NOT NULL DEFAULT false,
-    FOREIGN KEY (ctr_id) REFERENCES exp.country (ctr_id)
+    FOREIGN KEY (ctr_id) REFERENCES exp.exp_country (ctr_id)
 );
 
-CREATE TABLE exp.role_person (
+CREATE TABLE exp.exp_role_person (
   rop_id SERIAL PRIMARY KEY,
   rol_id INTEGER NOT NULL,
   per_id INTEGER NOT NULL,
@@ -48,11 +48,11 @@ CREATE TABLE exp.role_person (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   modified_at TIMESTAMP,
   is_delete BOOLEAN NOT NULL DEFAULT false,
-  FOREIGN KEY (rol_id) REFERENCES exp.role (rol_id),
-  FOREIGN KEY (per_id) REFERENCES exp.person (per_id)
+  FOREIGN KEY (rol_id) REFERENCES exp.exp_role (rol_id),
+  FOREIGN KEY (per_id) REFERENCES exp.exp_person (per_id)
 );
 
-CREATE TABLE exp.person_category (
+CREATE TABLE exp.exp_person_category (
   cat_id SERIAL PRIMARY KEY,
   cat_name VARCHAR NOT NULL,
   cat_type VARCHAR(1) NOT NULL,
@@ -61,10 +61,10 @@ CREATE TABLE exp.person_category (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   modified_at TIMESTAMP,
   is_delete BOOLEAN NOT NULL DEFAULT false,
-  FOREIGN KEY (per_id) REFERENCES exp.person (per_id)
+  FOREIGN KEY (per_id) REFERENCES exp.exp_person (per_id)
 );
 
-CREATE TABLE exp.transaction (
+CREATE TABLE exp.exp_transaction (
   trn_id SERIAL PRIMARY KEY,
   trn_uuid UUID NOT NULL,
   trn_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -74,12 +74,12 @@ CREATE TABLE exp.transaction (
   cat_id INTEGER NOT NULL,
   per_id INTEGER NOT NULL,
   is_delete BOOLEAN NOT NULL DEFAULT false,
-  FOREIGN KEY (cat_id) REFERENCES exp.person_category (cat_id),
-  FOREIGN KEY (per_id) REFERENCES exp.person (per_id)
+  FOREIGN KEY (cat_id) REFERENCES exp.exp_person_category (cat_id),
+  FOREIGN KEY (per_id) REFERENCES exp.exp_person (per_id)
 );
 
-COMMENT ON COLUMN exp.country.ctr_acronym IS 'Based ISO-3166-1 ALPHA-2';
+COMMENT ON COLUMN exp.exp_country.ctr_acronym IS 'Based ISO-3166-1 ALPHA-2';
 
-COMMENT ON COLUMN exp.transaction.trn_month_reference IS 'Month of reference';
+COMMENT ON COLUMN exp.exp_transaction.trn_month_reference IS 'Month of reference';
 
-COMMENT ON COLUMN exp.person_category.cat_type IS 'Type: I=Income E=Expense';
+COMMENT ON COLUMN exp.exp_person_category.cat_type IS 'Type: I=Income E=Expense';
