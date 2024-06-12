@@ -7,7 +7,7 @@ VALUES
 INSERT INTO exp.exp_role (rol_name, created_at,modified_at, is_delete)
 VALUES
        ('ADMIN', CURRENT_TIMESTAMP,null, false),
-       ('USER', CURRENT_TIMESTAMP, null,false);
+       ('BASIC', CURRENT_TIMESTAMP, null,false);
 
 -- Inserts para la tabla exp.person
 INSERT INTO exp.exp_person (per_uuid, per_mail, per_name, per_lastname, per_password, per_last_access, ctr_id, created_at, modified_at,is_delete)
