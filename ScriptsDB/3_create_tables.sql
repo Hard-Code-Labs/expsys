@@ -1,9 +1,9 @@
--- drop table exp.exp_transaction cascade;
--- drop table exp.exp_person_category cascade;
--- drop table exp.exp_country cascade;
--- drop table exp.exp_role_person cascade;
--- drop table exp.exp_person cascade;
--- drop table exp.exp_role cascade;
+drop table exp.exp_transaction cascade;
+drop table exp.exp_person_category cascade;
+drop table exp.exp_country cascade;
+drop table exp.exp_role_person cascade;
+drop table exp.exp_person cascade;
+drop table exp.exp_role cascade;
 
 CREATE TABLE exp.exp_country (
  ctr_id SERIAL PRIMARY KEY,
@@ -56,6 +56,7 @@ CREATE TABLE exp.exp_person_category (
   cat_id SERIAL PRIMARY KEY,
   cat_name VARCHAR NOT NULL,
   cat_type VARCHAR(1) NOT NULL,
+  cat_icon VARCHAR,
   cat_editable BOOLEAN NOT NULL DEFAULT true,
   per_id INTEGER,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

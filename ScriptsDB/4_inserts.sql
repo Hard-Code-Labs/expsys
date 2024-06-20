@@ -24,10 +24,10 @@ INSERT INTO exp.exp_role_person (rol_id, per_id, rop_active, rop_start_date, cre
 VALUES (1, 1, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP,null, false);
 
 -- Common categories
-INSERT INTO exp.exp_person_category (cat_name, cat_type, cat_editable, per_id, created_at,modified_at, is_delete)
+INSERT INTO exp.exp_person_category (cat_name, cat_type,cat_icon, cat_editable, per_id, created_at,modified_at, is_delete)
 VALUES
-      ('Food', 'E', false, null, CURRENT_TIMESTAMP,null, false),
-      ('Internet', 'E', false, null, CURRENT_TIMESTAMP,null, false);
+      ('Food', 'E',null, false, null, CURRENT_TIMESTAMP,null, false),
+      ('Internet', 'E',null, false, null, CURRENT_TIMESTAMP,null, false);
 
 -- Categories for me
 INSERT INTO exp.exp_person_category (cat_name, cat_type, cat_editable, per_id, created_at,modified_at, is_delete)
