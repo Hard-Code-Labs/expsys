@@ -15,7 +15,7 @@ public class ExpCountry extends AuditableEntity implements Serializable {
     @Id
     @Column(name = "ctr_id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer ctrId;
+    private Long ctrId;
 
     @Column(name = "ctr_acronym", length = 5,unique = true)
     private String ctrAcronym;

@@ -18,7 +18,7 @@ public class ExpPerson extends AuditableEntity implements Serializable {
     @Id
     @Column(name = "per_id", nullable = false)
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer perId;
+    private Long perId;
 
     @Column(name = "per_uuid", nullable = false, unique = true)
     @UuidGenerator(style = UuidGenerator.Style.RANDOM)
@@ -36,15 +36,19 @@ public class ExpPerson extends AuditableEntity implements Serializable {
     @Column(name = "per_password",nullable = false, length = 255)
     private String perPassword;
 
+    @Lob
+    @Column(name = "per_avatar")
+    private byte[] perAvatar;
+
     @Column(name = "per_last_access",nullable = false, columnDefinition = "timestamp")
     private LocalDateTime lastAccess;
-
-    @OneToMany(mappedBy = "expPerson")
-    private List<ExpRolePerson> roleList;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ctr_id", referencedColumnName = "ctr_id")
     private ExpCountry expCountry;
+
+    @OneToMany(mappedBy = "expPerson")
+    private List<ExpRolePerson> roleList;
 
     @OneToMany(mappedBy = "expPerson")
     private List<ExpPersonCategory> expCategories;

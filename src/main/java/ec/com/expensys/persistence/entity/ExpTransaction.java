@@ -19,7 +19,7 @@ public class ExpTransaction implements Serializable {
     @Id
     @Column(name = "trn_id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer trnId;
+    private Long trnId;
 
     @UuidGenerator(style = UuidGenerator.Style.RANDOM)
     @Column(name = "trn_uuid", nullable = false, unique = true)

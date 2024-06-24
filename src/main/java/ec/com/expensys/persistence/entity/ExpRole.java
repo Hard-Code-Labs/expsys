@@ -16,7 +16,7 @@ public class ExpRole extends AuditableEntity implements Serializable {
     @Id
     @Column(name = "rol_id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer rolId;
+    private Long rolId;
 
     @Column(name = "rol_name", nullable = false, length = 50)
     private String rolName;

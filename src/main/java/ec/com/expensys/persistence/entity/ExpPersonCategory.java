@@ -15,7 +15,7 @@ public class ExpPersonCategory extends AuditableEntity implements Serializable {
     @Id
     @Column(name = "cat_id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer catId;
+    private Long catId;
 
     @Column(name = "cat_name", nullable = false)
     private String catName;
