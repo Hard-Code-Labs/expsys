@@ -30,6 +30,7 @@ CREATE TABLE exp.exp_person (
     per_name VARCHAR(60) NOT NULL,
     per_lastname VARCHAR(60) NOT NULL,
     per_password VARCHAR NOT NULL,
+    per_avatar bytea,
     per_last_access TIMESTAMP,
     ctr_id INTEGER NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
