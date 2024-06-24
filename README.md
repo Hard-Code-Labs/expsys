@@ -1,4 +1,9 @@
-<h1 align="center" id="title">Expenses System</h1>
+<h1 align="center" id="title">MoneyAtic</h1>
+
+<p id="description">Expenses System, aka 🤑Moneyatic🤪, is a backend side project I made with my bro
+  <a href="https://github.com/Freddyz5">Freddy</a>
+on the frontend. It will allow you to control your expenses and incomes.</p>
+
 
 ## Table of Contents
 
@@ -12,18 +17,18 @@
   
 ## Features
 
-Here're some of the project's best features:
+Here're some of the project's best features: 
 
 *   Check your expenses and incomes with the awesome dashboard
-*   IA integrated (soon)
-*   Multiple user (soon)
+*   IA integrated (coming soon)
+*   Multiple user (coming soon)
 
 ## Installation Steps:
 
 1. Clone the repository.
-2. Open the project with IDEA.
-3. Run the database scripts on your localhost postgreSQL server.
-4. Overwrite the database connection
+2. Open the project with IntelliJ IDEA.
+3. Run the database scripts from the ScriptBD folder on your local PostgreSQL server.
+4. Update the database connection settings.
 
 ## The process 
 ### Built with
@@ -41,4 +46,4 @@ Technologies used in the project:
 
 ## Author
 
-Made with 🥲 by [tebostancamino](https://instagram.com/tebostancamino)
+Made with 🖤 by [tebostancamino](https://instagram.com/tebostancamino)
