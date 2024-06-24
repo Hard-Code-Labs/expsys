@@ -2,8 +2,10 @@ package ec.com.expensys.web.exception;
 
 public final class MailAlreadyExistException extends RuntimeException{
 
+    private static final String defaultMessage = "Mail already exist";
+
     public MailAlreadyExistException() {
-        super();
+        super(defaultMessage);
     }
 
     public MailAlreadyExistException(String message) {

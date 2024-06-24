@@ -2,13 +2,10 @@ package ec.com.expensys.web.controller;
 
 import ec.com.expensys.persistence.entity.ExpPerson;
 import ec.com.expensys.service.ExpPersonService;
-import ec.com.expensys.web.dto.ExpPersonDto;
+import ec.com.expensys.service.dto.ExpPersonDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -25,7 +22,7 @@ public class ExpPersonController {
 
 
     @PostMapping("/registration")
-    public ResponseEntity<ExpPerson> register(ExpPersonDto personDto){
+    public ResponseEntity<ExpPerson> register(@RequestBody ExpPersonDto personDto){
         try{
             return new ResponseEntity<>(
                     expPersonService.registerNewPerson(personDto),
@@ -35,9 +32,8 @@ public class ExpPersonController {
         }
     }
 
-
     @GetMapping
-    public ResponseEntity<List<ExpPerson>> findAll(){
+    public ResponseEntity<List<ExpPersonDto>> findAll(){
          return ResponseEntity.ok(expPersonService.findAll());
     }
 }
