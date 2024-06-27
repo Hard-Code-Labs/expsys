@@ -10,11 +10,12 @@ import java.io.Serializable;
 @Getter
 @Setter
 @Table(name = "exp_country",schema = "exp")
+@SequenceGenerator(name = "exp_country_sq", sequenceName = "exp_country_sq", allocationSize = 1)
 public class ExpCountry extends AuditableEntity implements Serializable {
 
     @Id
     @Column(name = "ctr_id", nullable = false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "exp_country_sq")
     private Long ctrId;
 
     @Column(name = "ctr_acronym", length = 5,unique = true)

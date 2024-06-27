@@ -12,12 +12,12 @@ public class AuditableEntity {
 
     @CreatedDate
     @Column(name = "created_at")
-    private LocalDateTime createAt;
+    private LocalDateTime createAt = LocalDateTime.now();
 
     @LastModifiedDate
     @Column(name = "modified_at")
     private LocalDateTime modifiedAt;
 
     @Column(name = "is_delete", nullable = false)
-    private Boolean isDeleted;
+    private Boolean isDeleted = Boolean.FALSE;
 }

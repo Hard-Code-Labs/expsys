@@ -13,11 +13,12 @@ import java.util.UUID;
 @Getter
 @Setter
 @Table(name = "exp_person", schema = "exp")
+@SequenceGenerator(name = "exp_person_sq", sequenceName = "exp_person_sq", allocationSize = 1)
 public class ExpPerson extends AuditableEntity implements Serializable {
 
     @Id
     @Column(name = "per_id", nullable = false)
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "exp_person_sq")
     private Long perId;
 
     @Column(name = "per_uuid", nullable = false, unique = true)
@@ -36,11 +37,10 @@ public class ExpPerson extends AuditableEntity implements Serializable {
     @Column(name = "per_password",nullable = false, length = 255)
     private String perPassword;
 
-    @Lob
     @Column(name = "per_avatar")
     private byte[] perAvatar;
 
-    @Column(name = "per_last_access",nullable = false, columnDefinition = "timestamp")
+    @Column(name = "per_last_access", columnDefinition = "timestamp")
     private LocalDateTime lastAccess;
 
     @ManyToOne(fetch = FetchType.LAZY)

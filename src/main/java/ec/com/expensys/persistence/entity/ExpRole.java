@@ -11,11 +11,12 @@ import java.util.List;
 @Getter
 @Setter
 @Table(name = "exp_role",schema = "exp")
+@SequenceGenerator(name = "exp_role_sq", sequenceName = "exp_role_sq", allocationSize = 1)
 public class ExpRole extends AuditableEntity implements Serializable {
 
     @Id
     @Column(name = "rol_id", nullable = false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "exp_role_sq")
     private Long rolId;
 
     @Column(name = "rol_name", nullable = false, length = 50)

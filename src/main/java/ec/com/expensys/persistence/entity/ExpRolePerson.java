@@ -11,11 +11,12 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @Table(name = "exp_role_person", schema = "exp")
+@SequenceGenerator(name = "exp_role_person_sq", sequenceName = "exp_role_person_sq", allocationSize = 1)
 public class ExpRolePerson extends AuditableEntity implements Serializable {
 
     @Id
     @Column(name = "rop_id", nullable = false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "exp_role_person_sq")
     private Long ropId;
 
     @Column(name = "rop_active", nullable = false)
