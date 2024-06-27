@@ -26,7 +26,7 @@ import java.util.UUID;
 @Service
 public class ExpPersonService {
 
-    private PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
     private final ExpPersonMapper expPersonMapper;
     private final ExpRolePersonRepository expRolePersonRepository;
@@ -38,13 +38,16 @@ public class ExpPersonService {
 
 
     @Autowired
-    public ExpPersonService(ExpPersonMapper expPersonMapper, ExpRolePersonRepository expRolePersonRepository,
+    public ExpPersonService(PasswordEncoder passwordEncoder,
+                            ExpPersonMapper expPersonMapper,
+                            ExpRolePersonRepository expRolePersonRepository,
                             ExpPersonRepository expPersonRepository,
                             ExpCountryRepository expCountryRepository,
                             ExpRoleRepository expRoleRepository,
                             MessageSource messageSource,
                             CryptoService cryptoService) {
 
+        this.passwordEncoder = passwordEncoder;
         this.expRolePersonRepository = expRolePersonRepository;
         this.expCountryRepository = expCountryRepository;
         this.expPersonRepository = expPersonRepository;
@@ -61,8 +64,7 @@ public class ExpPersonService {
 
 
     @Transactional
-    public ExpPerson registerNewPerson(ExpPersonDto personDto){
-        System.out.println("persona a guardar " + personDto);
+    public ExpPersonDto registerNewPerson(ExpPersonDto personDto){
         if(personDto.getPerMail().isEmpty()){
             throw new RuntimeException("El mail no puede estar vacio");
         }
@@ -83,9 +85,10 @@ public class ExpPersonService {
                 .orElseThrow();
 
         ExpPerson personToSave = new ExpPerson();
+        personToSave.setPerUUID(UUID.randomUUID());
         personToSave.setPerMail(personDto.getPerMail());
         personToSave.setPerName(personDto.getPerName());
-        personToSave.setPerLastname(personDto.getPerLastName());
+        personToSave.setPerLastname(personDto.getPerLastname());
         personToSave.setPerPassword(passwordEncoder.encode(decryptPassword));
         personToSave.setExpCountry(personCountry);
 
@@ -101,7 +104,7 @@ public class ExpPersonService {
 
         expRolePersonRepository.save(rolePerson);
 
-        return personSaved;
+        return expPersonMapper.toPersonDto(personSaved);
     }
 
     private boolean emailExists(final String email) {
