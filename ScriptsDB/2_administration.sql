@@ -4,8 +4,8 @@
 CREATE SCHEMA exp;
 
 -- 2) Crear Roles
-CREATE ROLE exp_readonly;
-CREATE ROLE exp_readwrite;
+CREATE ROLE exp_readonly PASSWORD 'expreadonly@hardcodelabs';
+CREATE ROLE exp_readwrite PASSWORD 'expreadonly@hardcodelabs';
 
 -- 3) Permiso al Rol para Conectarse a la Base de Datos xisdb
 GRANT CONNECT ON DATABASE xisdb TO exp_readonly;
@@ -23,7 +23,7 @@ GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA exp TO exp_readwrit
 ALTER DEFAULT PRIVILEGES IN SCHEMA exp GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO exp_readwrite;
 
 -- 6) Finalmente creo los usuarios y les asigno un rol
-CREATE USER exp WITH ENCRYPTED PASSWORD 'expdev';
+CREATE USER exp WITH ENCRYPTED PASSWORD 'expdev@hardcodelabs';
 GRANT exp_readwrite TO exp;
 
 --Cambiar clave de un usuario
