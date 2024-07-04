@@ -28,17 +28,9 @@ public class SecurityConfig {
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(req -> req
                         .requestMatchers("*").permitAll()
-//                        .requestMatchers("api/customers/**").hasAnyRole("ADMIN","CUSTOMER")
-//                        .requestMatchers(HttpMethod.GET,"/api/pizzas/**").hasAnyRole("ADMIN","CUSTOMER")
-//                        .requestMatchers(HttpMethod.POST,"/api/pizzas/**").hasRole("ADMIN")
-//                        .requestMatchers(HttpMethod.PUT).hasRole("ADMIN")
-//                        .requestMatchers("api/orders/random").hasAuthority("random_order")
-//                        .requestMatchers("/api/orders/**").hasRole("ADMIN")
-//                        .anyRequest().authenticated())
                 )
                 .csrf(AbstractHttpConfigurer::disable)
-                .cors(Customizer.withDefaults());
-//                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+                .cors(cors -> cors.configurationSource(corsConfigurationSource));
 
         return httpSecurity.build();
     }
