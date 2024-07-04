@@ -1,5 +1,4 @@
 # Build stage
-#FROM bellsoft/liberica-openjdk-alpine-musl AS builder
 FROM gradle:8.7-jdk AS builder
 
 # Crear directorio de la aplicación
@@ -7,18 +6,18 @@ ENV APP_HOME=/usr/app/
 WORKDIR $APP_HOME
 
 # Copiar archivos de Gradle Wrapper y configuraciones de build
-COPY gradlew $APP_HOME/
+COPY build.gradle settings.gradle $APP_HOME
+
 COPY gradle $APP_HOME/gradle
-COPY build.gradle settings.gradle $APP_HOME/
+COPY --chown=gradle:gradle . /home/gradle/src
+USER root
+RUN chown -R gradle /home/gradle/src
 
 # Copiar el resto del proyecto
 COPY . .
 
-# Dar permisos de ejecución al script gradlew
-RUN chmod +x gradlew
-
 # Ejecutar el build usando Gradle Wrapper
-RUN ./gradlew clean build
+RUN gradle clean build
 
 # Run stage
 FROM openjdk:17-alpine AS runner
