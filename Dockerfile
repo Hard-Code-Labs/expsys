@@ -20,7 +20,7 @@ COPY . .
 RUN chmod +x gradlew
 
 # Ejecutar el build usando Gradle Wrapper
-RUN ./gradlew clean build
+RUN gradle clean build
 
 # Run stage
 FROM openjdk:17-alpine AS runner
