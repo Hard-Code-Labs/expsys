@@ -1,6 +1,6 @@
 # Build stage
 #FROM bellsoft/liberica-openjdk-alpine-musl AS builder
-FROM openjdk:17-alpine AS builder
+FROM gradle:8.7-jdk AS builder
 
 # Crear directorio de la aplicación
 ENV APP_HOME=/usr/app/
