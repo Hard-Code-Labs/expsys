@@ -2,7 +2,7 @@
 # Multistage dockerfile para hacer build con gradle
 
 # Build stage
-FROM openjdk:17-alpine AS builder
+FROM gradle:8.8-alpine AS builder
 
 # Crear directorio de la aplicación
 ENV APP_HOME=/usr/app/
