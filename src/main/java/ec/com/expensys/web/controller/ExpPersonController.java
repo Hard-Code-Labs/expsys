@@ -35,7 +35,6 @@ public class ExpPersonController {
         }
     }
 
-    @CrossOrigin(origins = "*")
     @GetMapping
     public ResponseEntity<List<ExpPersonDto>> findAll(){
          return ResponseEntity.ok(expPersonService.findAll());
