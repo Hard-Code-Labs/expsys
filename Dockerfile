@@ -1,5 +1,6 @@
 # Build stage
-FROM bellsoft/liberica-openjdk-alpine-musl AS builder
+#FROM bellsoft/liberica-openjdk-alpine-musl AS builder
+FROM openjdk:17-alpine AS builder
 
 # Crear directorio de la aplicación
 ENV APP_HOME=/usr/app/
@@ -20,7 +21,7 @@ RUN chmod +x gradlew
 RUN ./gradlew clean build
 
 # Run stage
-FROM bellsoft/liberica-openjdk-alpine-musl AS runner
+FROM openjdk:17-alpine AS runner
 
 ENV ARTIFACT_NAME=expsys-0.0.1-SNAPSHOT.jar
 ENV APP_HOME=/usr/app/
