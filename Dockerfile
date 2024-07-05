@@ -1,27 +1,27 @@
 ###TEST GRADLE EMBEBIDO
 # Multistage dockerfile para hacer build con gradle
 
-# Build stage
 FROM gradle:jdk17 AS builder
 
 # Crear directorio de la aplicación
 ENV APP_HOME=/usr/app/
 WORKDIR $APP_HOME
 
-# Copiar archivos de Gradle Wrapper y configuraciones de build
-# COPY gradlew $APP_HOME/
-# COPY gradle $APP_HOME/gradle
-# COPY build.gradle settings.gradle $APP_HOME/
+# Copiar los archivos de Gradle y el wrapper primero (aprovechando la cache de Docker)
+COPY build.gradle.kts settings.gradle.kts gradlew $APP_HOME
+COPY gradle $APP_HOME/gradle
+
+# Dar permisos de ejecución al wrapper de Gradle
+RUN chmod +x gradlew
+
+# Descargar las dependencias (cache de Docker)
+RUN ./gradlew --no-daemon build || return 0
 
 # Copiar el resto del proyecto
 COPY . .
 
-# Dar permisos de ejecución al script gradlew
-# RUN chmod +x gradlew
-
 # Ejecutar el build usando Gradle Wrapper
-RUN ./gradlew clean build
-ENTRYPOINT [ "ls" ]
+RUN ./gradlew clean build --no-daemon
 
 
 
