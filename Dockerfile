@@ -9,19 +9,19 @@ ENV APP_HOME=/usr/app/
 WORKDIR $APP_HOME
 
 # Copiar archivos de Gradle Wrapper y configuraciones de build
-COPY gradlew $APP_HOME/
-COPY gradle $APP_HOME/gradle
-COPY build.gradle settings.gradle $APP_HOME/
+# COPY gradlew $APP_HOME/
+# COPY gradle $APP_HOME/gradle
+# COPY build.gradle settings.gradle $APP_HOME/
 
 # Copiar el resto del proyecto
 COPY . .
 
 # Dar permisos de ejecución al script gradlew
-RUN chmod +x gradlew
+# RUN chmod +x gradlew
 
 # Ejecutar el build usando Gradle Wrapper
+RUN ./gradlew clean build
 ENTRYPOINT [ "ls" ]
-RUN gradle clean build
 
 
 
