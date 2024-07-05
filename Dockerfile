@@ -1,16 +1,19 @@
-# Run stage
-FROM openjdk:17-alpine AS runner
+FROM gradle:jdk17 AS builder
+
+ENV APP_HOME=/usr/app/
+WORKDIR $APP_HOME
+
+COPY . .
+RUN chmod +x gradlew
+RUN ./gradlew clean build --no-daemon
+
+FROM openjdk:17-jdk-slim
 
 ENV ARTIFACT_NAME=expsys.jar
 ENV APP_HOME=/usr/app/
 WORKDIR $APP_HOME
 
-# Ejecutar el build usando Gradle Wrapper
-RUN ./gradlew build --no-daemon
-
-# Copiar el JAR generado desde el build stage
 COPY --from=builder $APP_HOME/build/libs/*.jar $ARTIFACT_NAME
-
-# Definir el comando de entrada para ejecutar la aplicación
-ENTRYPOINT exec java -jar ${ARTIFACT_NAME}
+EXPOSE 8080
+ENTRYPOINT ["java", "-jar", "app.jar"]
 #ENTRYPOINT exec java -jar -Dspring.profiles.active=dev ${ARTIFACT_NAME}
