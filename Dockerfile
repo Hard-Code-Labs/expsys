@@ -20,8 +20,9 @@ COPY . .
 RUN chmod +x gradlew
 
 # Ejecutar el build usando Gradle Wrapper
-RUN ./gradlew clean build
 ENTRYPOINT [ "ls" ]
+RUN gradle clean build
+
 
 
 # Run stage
