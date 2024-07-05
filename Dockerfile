@@ -2,7 +2,7 @@
 # Multistage dockerfile para hacer build con gradle
 
 # Build stage
-FROM gradle:latest AS builder
+FROM gradle:jdk17 AS builder
 
 # Crear directorio de la aplicación
 ENV APP_HOME=/usr/app/
@@ -20,7 +20,9 @@ COPY . .
 RUN chmod +x gradlew
 
 # Ejecutar el build usando Gradle Wrapper
-RUN ./gradlew build
+RUN ./gradlew clean build
+ENTRYPOINT [ "ls" ]
+
 
 # Run stage
 FROM openjdk:17-alpine AS runner
