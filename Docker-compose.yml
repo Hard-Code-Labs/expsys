@@ -1,0 +1,40 @@
+version: '3.9'
+
+services:
+  virtual_postgres:
+    container_name: postgres_docker
+    image: postgres:16
+    restart: always
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata_docker:/var/lib/postgresql/data
+    networks:
+      - hardcodelabsnet
+
+  expsysapp:
+    image: tebanes/hardcodelabs:0.0.1
+    container_name: expsysdev
+    restart: always
+    environment:
+      VIRTUAL_POSTGRES_URL: jdbc:postgresql://virtual_postgres:5432/xisdb
+      VIRTUAL_POSTGRES_NAME: exp
+      VIRTUAL_POSTGRES_PASSWORD: expdev@hardcodelabs
+    ports:
+      - "8080:8080"
+    networks:
+      - hardcodelabsnet
+    depends_on:
+      - virtual_postgres
+
+networks:
+  hardcodelabsnet:
+    driver: bridge
+
+volumes:
+  pgdata_docker:
+    driver: local
