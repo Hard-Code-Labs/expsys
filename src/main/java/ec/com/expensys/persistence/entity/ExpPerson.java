@@ -43,6 +43,12 @@ public class ExpPerson extends AuditableEntity implements Serializable {
     @Column(name = "per_last_access", columnDefinition = "timestamp")
     private LocalDateTime lastAccess;
 
+    @Column(name = "per_verification_code", length = 100)
+    private String perVerificationCode;
+
+    @Column(name = "per_enabled", nullable = false)
+    private Boolean isEnabled;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ctr_id", referencedColumnName = "ctr_id")
     private ExpCountry expCountry;

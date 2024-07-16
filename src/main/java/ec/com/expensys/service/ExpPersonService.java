@@ -90,6 +90,7 @@ public class ExpPersonService {
         personToSave.setPerName(personDto.getPerName());
         personToSave.setPerLastname(personDto.getPerLastname());
         personToSave.setPerPassword(passwordEncoder.encode(decryptPassword));
+        personToSave.setIsEnabled(false);
         personToSave.setExpCountry(personCountry);
 
         ExpPerson personSaved = expPersonRepository.save(personToSave);

@@ -47,6 +47,8 @@ CREATE TABLE exp.exp_person (
     per_password VARCHAR NOT NULL,
     per_avatar bytea,
     per_last_access TIMESTAMP,
+    per_verification_code VARCHAR(100),
+    per_enabled BOOLEAN NOT NULL DEFAULT false,
     ctr_id INTEGER NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     modified_at TIMESTAMP,

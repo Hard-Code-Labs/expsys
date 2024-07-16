@@ -23,6 +23,8 @@ public interface ExpPersonMapper {
     @InheritInverseConfiguration
     @Mapping(target = "perId", ignore = true)
     @Mapping(target = "lastAccess", ignore = true)
+    @Mapping(target = "perVerificationCode", ignore = true)
+    @Mapping(target = "isEnabled", ignore = true)
     @Mapping(target = "roleList", ignore = true)
     @Mapping(target = "expCategories", ignore = true)
     @Mapping(target = "expTransactions", ignore = true)
