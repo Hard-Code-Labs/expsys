@@ -2,7 +2,7 @@ version: '3.9'
 
 services:
   expsysapp:
-    image: tebanes/hardcodelabs:expsys-0.0.1
+    image: hardcodelabs/hardcodelabs:expsys-0.0.1
     container_name: expsysdev
     restart: always
     environment:
