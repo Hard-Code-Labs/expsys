@@ -3,7 +3,6 @@ package ec.com.expensys.service;
 import ec.com.expensys.config.security.PEMUtils;
 import ec.com.expensys.web.exception.DecryptException;
 import ec.com.expensys.web.exception.ErrorCode;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.BadPaddingException;
