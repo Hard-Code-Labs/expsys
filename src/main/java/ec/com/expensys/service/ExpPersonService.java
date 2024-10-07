@@ -1,6 +1,5 @@
 package ec.com.expensys.service;
 
-import com.resend.core.exception.ResendException;
 import ec.com.expensys.config.security.JWTUtils;
 import ec.com.expensys.persistence.entity.ExpCountry;
 import ec.com.expensys.persistence.entity.ExpPerson;
@@ -13,11 +12,12 @@ import ec.com.expensys.persistence.repository.ExpRolePersonRepository;
 import ec.com.expensys.persistence.repository.ExpRoleRepository;
 import ec.com.expensys.service.dto.ExpPersonDto;
 import ec.com.expensys.service.dto.RegistrationDto;
-import ec.com.expensys.web.exception.MailAlreadyExistException;
+import ec.com.expensys.web.exception.DuplicateException;
+import ec.com.expensys.web.exception.ErrorCode;
+import ec.com.expensys.web.exception.NotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -29,39 +29,37 @@ import java.util.UUID;
 @Service
 public class ExpPersonService {
 
-    @Autowired
-    private JWTUtils jwtUtils;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
     private final ExpPersonMapper expPersonMapper;
+
     private final ExpRolePersonRepository expRolePersonRepository;
     private final ExpCountryRepository expCountryRepository;
     private final ExpPersonRepository expPersonRepository;
     private final ExpRoleRepository expRoleRepository;
-    private final MessageSource messageSource;
+    private final PasswordEncoder passwordEncoder;
+
     private final CryptoService cryptoService;
     private final EmailService emailService;
+    private final JWTUtils jwtUtils;
 
 
     @Autowired
-    public ExpPersonService(ExpPersonMapper expPersonMapper,
+    public ExpPersonService(JWTUtils jwtUtils, PasswordEncoder passwordEncoder, ExpPersonMapper expPersonMapper,
                             ExpRolePersonRepository expRolePersonRepository,
                             ExpPersonRepository expPersonRepository,
                             ExpCountryRepository expCountryRepository,
                             ExpRoleRepository expRoleRepository,
-                            MessageSource messageSource,
                             CryptoService cryptoService,
                             EmailService emailService) {
 
+        this.passwordEncoder = passwordEncoder;
         this.expRolePersonRepository = expRolePersonRepository;
         this.expCountryRepository = expCountryRepository;
         this.expPersonRepository = expPersonRepository;
         this.expRoleRepository = expRoleRepository;
         this.expPersonMapper = expPersonMapper;
-        this.messageSource = messageSource;
         this.cryptoService = cryptoService;
         this.emailService = emailService;
+        this.jwtUtils = jwtUtils;
     }
 
     public List<ExpPersonDto> findAll(){
@@ -71,23 +69,26 @@ public class ExpPersonService {
 
 
     @Transactional
-    public ExpPersonDto registerNewPerson(RegistrationDto person) throws ResendException {
-
-        if(person.getPerMail().isEmpty()){
-            throw new RuntimeException("El mail no puede estar vacio");
-        }
+    public ExpPersonDto registerNewPerson(RegistrationDto person) {
 
         if(emailExists(person.getPerMail())){
-            throw new MailAlreadyExistException();
+            throw new DuplicateException(ErrorCode.ALREADY_EXIST.getCode(),
+                    "Email already exists.",
+                    ExpPerson.class.getName());
         }
 
         String decryptPassword = decryptPassword(person);
         String tokenOnRegister = jwtUtils.createOnRegister(person.getPerName());
-        ExpCountry personCountry = expCountryRepository.findById(person.getCountryId()).orElseThrow();
+
+        ExpCountry personCountry = expCountryRepository.findById(person.getCountryId())
+                .orElseThrow(() -> new NotFoundException(ErrorCode.NOT_FOUND.getCode(),
+                                "Country not found by id",
+                                ExpPersonService.class.getName(),
+                                false));
 
         ExpPerson personSaved = saveNewPerson(person,decryptPassword,personCountry,tokenOnRegister);
 
-        saveNewRolePerson(2L,personSaved);
+        saveNewRolePerson(2L,personSaved);//TODO hacer enum de los roles
         sendMailToVerifyAccount(personSaved);
 
         return expPersonMapper.toPersonDto(personSaved);
@@ -98,16 +99,7 @@ public class ExpPersonService {
     }
 
     private String decryptPassword(RegistrationDto person){
-        if(person.getPerPassword().isEmpty()){
-            throw new RuntimeException("El password no puede estar vacio");
-        }
-
-        try {
-            return cryptoService.decrypt(person.getPerPassword());
-        }catch (Exception e){
-            log.error("Error al decifrar el password. {}",e.getMessage());
-            throw new RuntimeException("Error al decifrar el password con la llave privada");
-        }
+        return cryptoService.decrypt(person.getPerPassword());
     }
 
     private ExpPerson saveNewPerson(RegistrationDto person, String password, ExpCountry country, String tokenOnRegister){
@@ -125,7 +117,11 @@ public class ExpPersonService {
     }
 
     private void saveNewRolePerson(Long roleId, ExpPerson personSaved){
-        ExpRole basicRole = expRoleRepository.findById(roleId).orElseThrow();
+        ExpRole basicRole = expRoleRepository.findById(roleId)
+                .orElseThrow(() -> new NotFoundException(ErrorCode.NOT_FOUND.getCode(),
+                        "Role not found by id.",
+                        ExpPersonService.class.getName(),
+                        false));
 
         ExpRolePerson rolePerson = new ExpRolePerson();
         rolePerson.setExpPerson(personSaved);
@@ -136,7 +132,9 @@ public class ExpPersonService {
         expRolePersonRepository.save(rolePerson);
     }
 
-    private void sendMailToVerifyAccount(ExpPerson person) throws ResendException {
+
+    //TODO implementar freemarker y parametrizar URL
+    private void sendMailToVerifyAccount(ExpPerson person) {
         String URL_REDIRECT_POST_REGISTER = "http://localhost:3000/login/email-confirm?token=";
         emailService.sendEmail(person.getPerMail(),
                 "Welcome to Moneyatic",

@@ -4,6 +4,7 @@ import ec.com.expensys.persistence.entity.ExpPerson;
 import ec.com.expensys.service.ExpPersonService;
 import ec.com.expensys.service.dto.ExpPersonDto;
 import ec.com.expensys.service.dto.RegistrationDto;
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,15 +22,11 @@ public class RegistrationController {
     }
 
     @PostMapping("")
-    public ResponseEntity<ExpPersonDto> register(@RequestBody RegistrationDto personDto){
-        try{
+    public ResponseEntity<ExpPersonDto> register(@Valid @RequestBody RegistrationDto personDto){
             return new ResponseEntity<>(
                     personService.registerNewPerson(personDto),
                     HttpStatus.CREATED);
-        }catch (Exception e){
-            log.error(e.getMessage());
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
+
     }
 
     @PostMapping(path = "/confirmation")
