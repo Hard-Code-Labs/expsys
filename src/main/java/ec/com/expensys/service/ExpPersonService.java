@@ -132,7 +132,7 @@ public class ExpPersonService {
     }
 
 
-    //TODO implementar freemarker y parametrizar URL
+    //TODO parametrizar URL
     private void sendMailToVerifyAccount(ExpPerson person) {
         String URL_REDIRECT_POST_REGISTER = "http://localhost:3000/login/email-confirm?token=";
         String URL_TO_CONFIRM = URL_REDIRECT_POST_REGISTER + person.getPerVerificationCode();

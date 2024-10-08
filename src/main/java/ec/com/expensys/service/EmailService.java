@@ -32,7 +32,6 @@ public class EmailService {
     public void sendEmail(String to, String subject, Map<String, Object> data, String mailTemplateName) {
 
         String text = getMailTemplate(data, mailTemplateName);
-        System.out.println("plantilla : " + text);
 
         try{
             CreateEmailOptions emailRequest = CreateEmailOptions.builder()
@@ -44,7 +43,7 @@ public class EmailService {
 
             CreateEmailResponse mr = resend.emails().send(emailRequest);
 
-            log.debug("Send mail ID: {} to {}", mr.getId(),to);
+            log.info("Send mail ID: {} to {}", mr.getId(),to);
 
         }catch (ResendException e){
             throw new MailSenderException(ErrorCode.SEND_MAIL_ERROR.getCode(),
