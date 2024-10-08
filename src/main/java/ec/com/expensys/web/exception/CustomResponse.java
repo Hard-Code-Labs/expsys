@@ -1,14 +1,20 @@
 package ec.com.expensys.web.exception;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Map;
 
+@Data
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class CustomResponse implements Serializable {
 
@@ -17,7 +23,7 @@ public class CustomResponse implements Serializable {
 
     private int code;
     private LocalDateTime timestamp;
-    private String message;
+    private String customMessage;
     private String path;
     private Map<String, String> details;
 }

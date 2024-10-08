@@ -23,10 +23,7 @@ public class RegistrationController {
 
     @PostMapping("")
     public ResponseEntity<ExpPersonDto> register(@Valid @RequestBody RegistrationDto personDto){
-            return new ResponseEntity<>(
-                    personService.registerNewPerson(personDto),
-                    HttpStatus.CREATED);
-
+        return ResponseEntity.status(HttpStatus.CREATED).body(personService.registerNewPerson(personDto));
     }
 
     @PostMapping(path = "/confirmation")

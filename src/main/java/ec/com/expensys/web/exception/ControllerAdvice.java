@@ -28,7 +28,7 @@ public class ControllerAdvice {
         CustomResponse response = CustomResponse.builder()
                 .code(ce.getCode())
                 .timestamp(LocalDateTime.now())
-                .message(ce.getMessage())
+                .customMessage(ce.getMessage())
                 .path(request.getRequestURI())
                 .build();
 
@@ -52,7 +52,7 @@ public class ControllerAdvice {
         CustomResponse response = CustomResponse.builder()
                 .code(ErrorCode.BAD_ARGUMENT.getCode())
                 .timestamp(LocalDateTime.now())
-                .message(ve.getMessage())
+                .customMessage(ve.getBody().getDetail())
                 .path(request.getRequestURI())
                 .details(errors)
                 .build();
