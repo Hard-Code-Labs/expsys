@@ -22,8 +22,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -136,9 +135,24 @@ public class ExpPersonService {
     //TODO implementar freemarker y parametrizar URL
     private void sendMailToVerifyAccount(ExpPerson person) {
         String URL_REDIRECT_POST_REGISTER = "http://localhost:3000/login/email-confirm?token=";
+        String URL_TO_CONFIRM = URL_REDIRECT_POST_REGISTER + person.getPerVerificationCode();
+
+        Map<String, Object> data = getMapToMail(person, URL_TO_CONFIRM);
+
         emailService.sendEmail(person.getPerMail(),
                 "Welcome to Moneyatic",
-                URL_REDIRECT_POST_REGISTER + person.getPerVerificationCode());
+                data,
+                "confirmRegisterMail.ftl");
+    }
+
+    private Map<String, Object> getMapToMail(ExpPerson person, String URI){
+        Map<String, Object> model = new HashMap<>();
+        if(person != null){
+            model.put("perName", person.getPerName());
+            model.put("URI", URI);
+        }
+
+        return model;
     }
 
     public ExpPerson findByPerVerificationCode(String verificationCode){
