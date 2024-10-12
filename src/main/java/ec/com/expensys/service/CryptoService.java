@@ -34,13 +34,13 @@ public class CryptoService {
             return new String(decryptedMessage);
 
         }catch (NoSuchPaddingException | NoSuchAlgorithmException | InvalidKeyException |
-                IllegalBlockSizeException | BadPaddingException e){
+                IllegalBlockSizeException | BadPaddingException | IllegalArgumentException e){
 
             throw new DecryptException(ErrorCode.DECRYPT_ERROR.getCode(),
                     ErrorCode.DECRYPT_ERROR.getMessageTemplate(),
                     CryptoService.class.getName(),
                     true,
-                    e.getMessage());
+                    e.getLocalizedMessage());
         }
     }
 }
