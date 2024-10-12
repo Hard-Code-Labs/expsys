@@ -26,6 +26,11 @@ ALTER DEFAULT PRIVILEGES IN SCHEMA exp GRANT SELECT, INSERT, UPDATE, DELETE ON T
 CREATE USER exp WITH ENCRYPTED PASSWORD 'expdev@hardcodelabs';
 GRANT exp_readwrite TO exp;
 
+--Para mi usuario como DBA
+-- ALTER ROLE tebo CREATEDB ;
+-- ALTER ROLE tebo CREATEROLE ;
+-- GRANT ALL PRIVILEGES ON DATABASE xisdb TO tebo;
+
 --Cambiar clave de un usuario
 -- ALTER USER exp WITH PASSWORD 'niupass';
 
