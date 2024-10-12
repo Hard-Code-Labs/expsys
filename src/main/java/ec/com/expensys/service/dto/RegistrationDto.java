@@ -1,7 +1,6 @@
 package ec.com.expensys.service.dto;
 
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.*;
 
 import java.util.UUID;
@@ -14,25 +13,23 @@ public class RegistrationDto {
 
     private UUID perUUID;
 
-    @NotNull(message = "Mail can not be null.")
-    @Size(min = 5,max = 99, message = "Mail can not be empty and must not exceed 99 characters")
+    @Email(message = "Invalid mail format")
+    @NotBlank(message = "Mail cannot be empty")
     private final String perMail;
 
-    @NotNull(message = "Name can not be null.")
-    @Size(min = 2,max = 60, message = "Name can not be empty and must not exceed 60 characters")
+    @NotBlank(message = "Name cannot be empty")
     private final String perName;
 
-    @NotNull(message = "Lastname can not be null.")
-    @Size(min = 2,max = 99, message = "Lastname can not be empty and must not exceed 60 characters")
+    @NotBlank(message = "Last name cannot be empty")
     private final String perLastname;
 
-    @NotNull(message = "Password is required.")
-    @Size(min = 8, message = "Password can not be empty.")
+    @NotBlank(message = "Password cannot be empty")
     private final String perPassword;
 
     private final String perVerificationCode;
     private boolean isEnabled;
 
     @NotNull(message = "Country ID is required.")
+    @Positive(message = "Number must be positive and greater than zero")
     private final Long countryId;
 }
