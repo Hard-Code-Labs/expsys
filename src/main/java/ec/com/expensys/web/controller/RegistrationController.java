@@ -1,9 +1,14 @@
 package ec.com.expensys.web.controller;
 
+import com.auth0.jwt.exceptions.TokenExpiredException;
+import ec.com.expensys.config.security.JWTUtils;
 import ec.com.expensys.persistence.entity.ExpPerson;
 import ec.com.expensys.service.ExpPersonService;
 import ec.com.expensys.service.dto.ExpPersonDto;
 import ec.com.expensys.service.dto.RegistrationDto;
+import ec.com.expensys.web.exception.ErrorCode;
+import ec.com.expensys.web.exception.ExpiredTokenException;
+import ec.com.expensys.web.exception.NotFoundException;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -16,9 +21,11 @@ import org.springframework.web.bind.annotation.*;
 public class RegistrationController {
 
     private final ExpPersonService personService;
+    private final JWTUtils jwtUtils;
 
-    public RegistrationController(ExpPersonService personService) {
+    public RegistrationController(ExpPersonService personService, JWTUtils jwtUtils) {
         this.personService = personService;
+        this.jwtUtils = jwtUtils;
     }
 
     @PostMapping("")
@@ -26,25 +33,30 @@ public class RegistrationController {
         return ResponseEntity.status(HttpStatus.CREATED).body(personService.registerNewPerson(personDto));
     }
 
+    //revisar
     @PostMapping(path = "/confirmation")
-    public ResponseEntity<Boolean> confirmRegistration(@RequestBody String token){
-        try{
-            ExpPerson person = personService.findByPerVerificationCode(token);
+    public ResponseEntity<?> confirmRegistration(@RequestBody String token) {
 
-            if(person.getPerVerificationCode().equals(token)){
-                if(personService.verifyToken(token)){
-                    personService.enablePerson(person);
-                    return new ResponseEntity<>(true, HttpStatus.OK);
-                }else{
-                    log.error("El token ha caducado");
-                    return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST);
-                }
+        ExpPerson person = personService.findByPerVerificationCode(token)
+                .orElseThrow(() -> new NotFoundException(ErrorCode.NOT_FOUND.getCode(),
+                        "User has been removed from the database. Please register again",
+                        RegistrationController.class.getName(),
+                        false));
+
+        if(person.getIsEnabled()){
+            return ResponseEntity.ok("User already registered. Please redirect to login page");
+        }else{
+            try {
+                jwtUtils.validateToken(token);
+            } catch (TokenExpiredException e) {
+
+                personService.deletePerson(person);
+                throw new ExpiredTokenException("Token has expired. Please register again", JWTUtils.class.getName());
             }
-        }catch (Exception e){
-            log.error(e.getMessage());
         }
-        return new ResponseEntity<>(false, HttpStatus.NOT_FOUND);
+
+        personService.newPersonEnabled(person);
+        return ResponseEntity.ok("User registration successfully confirmed");
+
     }
-
-
 }

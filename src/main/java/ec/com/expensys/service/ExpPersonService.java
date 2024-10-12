@@ -77,7 +77,7 @@ public class ExpPersonService {
         }
 
         String decryptPassword = decryptPassword(person);
-        String tokenOnRegister = jwtUtils.createOnRegister(person.getPerName());
+        String tokenOnRegister = jwtUtils.createOnRegister(person.getPerMail());
 
         ExpCountry personCountry = expCountryRepository.findById(person.getCountryId())
                 .orElseThrow(() -> new NotFoundException(ErrorCode.NOT_FOUND.getCode(),
@@ -155,25 +155,17 @@ public class ExpPersonService {
         return model;
     }
 
-    public ExpPerson findByPerVerificationCode(String verificationCode){
-        ExpPerson person = expPersonRepository.findByPerVerificationCode(verificationCode)
-                .orElseThrow(() -> new RuntimeException("El codigo de verificacion ya no existe"));
-
-        if(person.getIsEnabled()){
-            throw new RuntimeException("Email ya fue verificado");
-        }
-
-        return person;
+    public Optional<ExpPerson> findByPerVerificationCode(String verificationCode){
+        return expPersonRepository.findByPerVerificationCode(verificationCode);
     }
 
-    public boolean verifyToken(String token){
-        return jwtUtils.isValid(token);
-    }
-
-    public void enablePerson(ExpPerson personUpdated){
+    public void newPersonEnabled(ExpPerson personUpdated){
         personUpdated.setIsEnabled(true);
-        personUpdated.setPerVerificationCode(null);
         expPersonRepository.save(personUpdated);
+    }
+
+    public void deletePerson(ExpPerson personToDelete){
+        expPersonRepository.delete(personToDelete);
     }
 }
 
