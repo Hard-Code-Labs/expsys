@@ -9,7 +9,9 @@ public enum ErrorCode {
     BAD_ARGUMENT(4002,"Value is not valid."),
     DECRYPT_ERROR(4003,"Error on decrypt using private key."),
     NOT_FOUND(4004,"Object not found on database."),
-    SEND_MAIL_ERROR(4005,"Error on sending mail."),;
+    SEND_MAIL_ERROR(4005,"Error on sending mail."),
+    TOKEN_EXPIRED(4006,"Token expired."),
+    TOKEN_INVALID(4007,"Error on processing token."),;
 
     private final int code;
     private final String messageTemplate;
