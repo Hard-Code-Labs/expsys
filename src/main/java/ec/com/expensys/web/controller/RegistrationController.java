@@ -6,9 +6,8 @@ import ec.com.expensys.persistence.entity.ExpPerson;
 import ec.com.expensys.service.ExpPersonService;
 import ec.com.expensys.service.dto.ExpPersonDto;
 import ec.com.expensys.service.dto.RegistrationDto;
-import ec.com.expensys.web.exception.ErrorCode;
-import ec.com.expensys.web.exception.ExpiredTokenException;
-import ec.com.expensys.web.exception.NotFoundException;
+import ec.com.expensys.service.record.RegistrationToken;
+import ec.com.expensys.web.exception.*;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -33,21 +32,22 @@ public class RegistrationController {
         return ResponseEntity.status(HttpStatus.CREATED).body(personService.registerNewPerson(personDto));
     }
 
-    //revisar
     @PostMapping(path = "/confirmation")
-    public ResponseEntity<?> confirmRegistration(@RequestBody String token) {
+    public ResponseEntity<?> confirmRegistration(@Valid @RequestBody RegistrationToken registrationToken) {
 
-        ExpPerson person = personService.findByPerVerificationCode(token)
+        ExpPerson person = personService.findByPerVerificationCode(registrationToken.verificationCode())
                 .orElseThrow(() -> new NotFoundException(ErrorCode.NOT_FOUND.getCode(),
                         "User has been removed from the database. Please register again",
                         RegistrationController.class.getName(),
                         false));
 
         if(person.getIsEnabled()){
-            return ResponseEntity.ok("User already registered. Please redirect to login page");
+            throw new DuplicateException(ErrorCode.ALREADY_EXIST.getCode(),
+                    "User already registered. Please redirect to login page",
+                    RegistrationController.class.getName());
         }else{
             try {
-                jwtUtils.validateToken(token);
+                jwtUtils.validateToken(person.getPerVerificationCode());
             } catch (TokenExpiredException e) {
 
                 personService.deletePerson(person);
