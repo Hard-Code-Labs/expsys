@@ -15,6 +15,7 @@ import ec.com.expensys.service.dto.RegistrationDto;
 import ec.com.expensys.web.exception.DuplicateException;
 import ec.com.expensys.web.exception.ErrorCode;
 import ec.com.expensys.web.exception.NotFoundException;
+import ec.com.expensys.web.utils.RoleEnum;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -87,7 +88,7 @@ public class ExpPersonService {
 
         ExpPerson personSaved = saveNewPerson(person,decryptPassword,personCountry,tokenOnRegister);
 
-        saveNewRolePerson(2L,personSaved);//TODO hacer enum de los roles
+        saveNewRolePerson(RoleEnum.BASIC,personSaved);
         sendMailToVerifyAccount(personSaved);
 
         return expPersonMapper.toPersonDto(personSaved);
@@ -115,16 +116,16 @@ public class ExpPersonService {
         return expPersonRepository.save(personToSave);
     }
 
-    private void saveNewRolePerson(Long roleId, ExpPerson personSaved){
-        ExpRole basicRole = expRoleRepository.findById(roleId)
+    private void saveNewRolePerson(RoleEnum role, ExpPerson personSaved){
+        ExpRole rol = expRoleRepository.findByRolName(role)
                 .orElseThrow(() -> new NotFoundException(ErrorCode.NOT_FOUND.getCode(),
-                        "Role not found by id.",
+                        "Role " + role + " not found",
                         ExpPersonService.class.getName(),
                         false));
 
         ExpRolePerson rolePerson = new ExpRolePerson();
         rolePerson.setExpPerson(personSaved);
-        rolePerson.setExpRole(basicRole);
+        rolePerson.setExpRole(rol);
         rolePerson.setRopActive(true);
         rolePerson.setRopStartDate(LocalDate.now());
 
@@ -134,7 +135,7 @@ public class ExpPersonService {
 
     //TODO parametrizar URL
     private void sendMailToVerifyAccount(ExpPerson person) {
-        String URL_REDIRECT_POST_REGISTER = "http://localhost:3000/login/email-confirm?token=";
+        String URL_REDIRECT_POST_REGISTER = "http://localhost:3000/login?token=";
         String URL_TO_CONFIRM = URL_REDIRECT_POST_REGISTER + person.getPerVerificationCode();
 
         Map<String, Object> data = getMapToMail(person, URL_TO_CONFIRM);

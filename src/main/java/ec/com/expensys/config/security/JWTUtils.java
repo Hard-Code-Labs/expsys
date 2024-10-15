@@ -31,7 +31,7 @@ public class JWTUtils {
                 .withIssuer("moneyatic")
                 .withIssuedAt(new Date())
                 .withExpiresAt(
-                        new Date(System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(3))) // duracion en minutos
+                        new Date(System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(30))) // duracion en minutos
                 .sign(algorithm);
     }
 
