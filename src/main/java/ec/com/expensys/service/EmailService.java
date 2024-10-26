@@ -9,6 +9,7 @@ import ec.com.expensys.web.exception.MailSenderException;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
@@ -20,10 +21,12 @@ import java.util.Map;
 @Service
 public class EmailService {
 
+    @Value("${constant.resendApiKey}")
+    private String RESEND_API_KEY;
+
     private final FreeMarkerConfigurer configurer;
 
-    //TODO pasar a variable de entorno
-    Resend resend = new Resend("re_PM918hcR_ENDdp39xHcq5vT8snjtU2cCN");
+    Resend resend = new Resend(RESEND_API_KEY);
 
     public EmailService(FreeMarkerConfigurer configurer) {
         this.configurer = configurer;

@@ -3,6 +3,7 @@ package ec.com.expensys.service;
 import ec.com.expensys.config.security.PEMUtils;
 import ec.com.expensys.web.exception.DecryptException;
 import ec.com.expensys.web.exception.MessageCode;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.BadPaddingException;
@@ -17,11 +18,13 @@ import java.util.Base64;
 @Service
 public class CryptoService {
 
+    @Value("${constant.privateKeyPath}")
+    private String PRIVATE_KEY_PATH;
+
     private final PrivateKey pemPrivateKey;
 
-    //TODO pasar a variable de entorno
     public CryptoService() throws Exception {
-        this.pemPrivateKey = PEMUtils.loadPrivateKey("RSA/private_pkcs8.pem");
+        this.pemPrivateKey = PEMUtils.loadPrivateKey(PRIVATE_KEY_PATH);
     }
 
     public String decrypt(String encryptMsg) {

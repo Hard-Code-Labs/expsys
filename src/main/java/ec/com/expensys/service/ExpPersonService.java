@@ -13,12 +13,13 @@ import ec.com.expensys.persistence.repository.ExpRoleRepository;
 import ec.com.expensys.service.dto.ExpPersonDto;
 import ec.com.expensys.service.dto.RegistrationDto;
 import ec.com.expensys.web.exception.DuplicateException;
-import ec.com.expensys.web.exception.ErrorCode;
+import ec.com.expensys.web.exception.MessageCode;
 import ec.com.expensys.web.exception.NotFoundException;
 import ec.com.expensys.web.utils.RoleEnum;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -41,6 +42,8 @@ public class ExpPersonService {
     private final EmailService emailService;
     private final JWTUtils jwtUtils;
 
+    @Value("${constant.url_redirect_after_register}")
+    private String URL_REDIRECT_AFTER_REGISTER;
 
     @Autowired
     public ExpPersonService(JWTUtils jwtUtils, PasswordEncoder passwordEncoder, ExpPersonMapper expPersonMapper,
@@ -69,10 +72,10 @@ public class ExpPersonService {
 
 
     @Transactional
-    public ExpPersonDto registerNewPerson(RegistrationDto person) {
+    public void registerNewPerson(RegistrationDto person) {
 
         if(emailExists(person.getPerMail())){
-            throw new DuplicateException(ErrorCode.ALREADY_EXIST.getCode(),
+            throw new DuplicateException(MessageCode.ALREADY_EXIST.getCode(),
                     "Email already exists.",
                     ExpPerson.class.getName());
         }
@@ -81,7 +84,7 @@ public class ExpPersonService {
         String tokenOnRegister = jwtUtils.createOnRegister(person.getPerMail());
 
         ExpCountry personCountry = expCountryRepository.findById(person.getCountryId())
-                .orElseThrow(() -> new NotFoundException(ErrorCode.NOT_FOUND.getCode(),
+                .orElseThrow(() -> new NotFoundException(MessageCode.NOT_FOUND.getCode(),
                                 "Country not found by id",
                                 ExpPersonService.class.getName(),
                                 false));
@@ -91,7 +94,7 @@ public class ExpPersonService {
         saveNewRolePerson(RoleEnum.BASIC,personSaved);
         sendMailToVerifyAccount(personSaved);
 
-        return expPersonMapper.toPersonDto(personSaved);
+        expPersonMapper.toPersonDto(personSaved);
     }
 
     private boolean emailExists(final String email) {
@@ -118,7 +121,7 @@ public class ExpPersonService {
 
     private void saveNewRolePerson(RoleEnum role, ExpPerson personSaved){
         ExpRole rol = expRoleRepository.findByRolName(role)
-                .orElseThrow(() -> new NotFoundException(ErrorCode.NOT_FOUND.getCode(),
+                .orElseThrow(() -> new NotFoundException(MessageCode.NOT_FOUND.getCode(),
                         "Role " + role + " not found",
                         ExpPersonService.class.getName(),
                         false));
@@ -133,10 +136,8 @@ public class ExpPersonService {
     }
 
 
-    //TODO parametrizar URL
     private void sendMailToVerifyAccount(ExpPerson person) {
-        String URL_REDIRECT_POST_REGISTER = "http://localhost:3000/login?token=";
-        String URL_TO_CONFIRM = URL_REDIRECT_POST_REGISTER + person.getPerVerificationCode();
+        String URL_TO_CONFIRM = URL_REDIRECT_AFTER_REGISTER + person.getPerVerificationCode();
 
         Map<String, Object> data = getMapToMail(person, URL_TO_CONFIRM);
 
