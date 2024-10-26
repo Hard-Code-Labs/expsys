@@ -21,8 +21,9 @@ public class CustomResponse implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
+    private final LocalDateTime timestamp = LocalDateTime.now();
+
     private int code;
-    private LocalDateTime timestamp;
     private String customMessage;
     private String path;
     private Map<String, String> details;

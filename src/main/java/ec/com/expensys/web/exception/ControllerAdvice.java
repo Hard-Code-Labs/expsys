@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,7 +26,6 @@ public class ControllerAdvice {
 
         CustomResponse response = CustomResponse.builder()
                 .code(ce.getCode())
-                .timestamp(LocalDateTime.now())
                 .customMessage(ce.getMessage())
                 .path(request.getRequestURI())
                 .build();
@@ -50,8 +48,7 @@ public class ControllerAdvice {
         });
 
         CustomResponse response = CustomResponse.builder()
-                .code(ErrorCode.BAD_ARGUMENT.getCode())
-                .timestamp(LocalDateTime.now())
+                .code(MessageCode.BAD_ARGUMENT.getCode())
                 .customMessage(ve.getBody().getDetail())
                 .path(request.getRequestURI())
                 .details(errors)

@@ -4,7 +4,7 @@ import com.resend.Resend;
 import com.resend.core.exception.ResendException;
 import com.resend.services.emails.model.CreateEmailOptions;
 import com.resend.services.emails.model.CreateEmailResponse;
-import ec.com.expensys.web.exception.ErrorCode;
+import ec.com.expensys.web.exception.MessageCode;
 import ec.com.expensys.web.exception.MailSenderException;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
@@ -46,7 +46,7 @@ public class EmailService {
             log.info("Send mail ID: {} to {}", mr.getId(),to);
 
         }catch (ResendException e){
-            throw new MailSenderException(ErrorCode.SEND_MAIL_ERROR.getCode(),
+            throw new MailSenderException(MessageCode.SEND_MAIL_ERROR.getCode(),
                     "Email could not be sent using the Resend API.",
                     EmailService.class.getName(),
                     e.getMessage());
@@ -60,7 +60,7 @@ public class EmailService {
 
         }catch (IOException | TemplateException e){
 
-            throw new MailSenderException(ErrorCode.SEND_MAIL_ERROR.getCode(),
+            throw new MailSenderException(MessageCode.SEND_MAIL_ERROR.getCode(),
                     "Error reading freemarker template " + mailTemplateName,
                     EmailService.class.getName(),
                     e.getMessage());

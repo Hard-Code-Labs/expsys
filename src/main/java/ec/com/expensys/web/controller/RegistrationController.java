@@ -4,10 +4,14 @@ import com.auth0.jwt.exceptions.TokenExpiredException;
 import ec.com.expensys.config.security.JWTUtils;
 import ec.com.expensys.persistence.entity.ExpPerson;
 import ec.com.expensys.service.ExpPersonService;
-import ec.com.expensys.service.dto.ExpPersonDto;
 import ec.com.expensys.service.dto.RegistrationDto;
 import ec.com.expensys.service.record.RegistrationToken;
 import ec.com.expensys.web.exception.*;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -17,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @RestController
 @RequestMapping("/v1/register")
+@Tag(name = "Registration", description = "Controller for register new users.")
 public class RegistrationController {
 
     private final ExpPersonService personService;
@@ -27,22 +32,89 @@ public class RegistrationController {
         this.jwtUtils = jwtUtils;
     }
 
+    @Operation(
+            summary = "Register new user",
+            description = "Create new disabled person on database",
+            tags = {"Registration"},
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    description = "Register new person",
+                    required = true,
+                    content = @Content(
+                            schema = @Schema(implementation = RegistrationDto.class)
+                    )
+            ),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "201",
+                            description = "Success",
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = CustomResponse.class)
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Custom Error",
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = CustomResponse.class)
+                            )
+                    )
+            }
+    )
     @PostMapping("")
-    public ResponseEntity<ExpPersonDto> register(@Valid @RequestBody RegistrationDto personDto){
-        return ResponseEntity.status(HttpStatus.CREATED).body(personService.registerNewPerson(personDto));
+    public ResponseEntity<CustomResponse> register(@Valid @RequestBody RegistrationDto personDto){
+        personService.registerNewPerson(personDto);
+        CustomResponse responseOk = CustomResponse.builder()
+                .code(MessageCode.CREATED.getCode())
+                .customMessage("New user registered successfully. Please check your email")
+                .path("/register")
+                .build();
+        return ResponseEntity.status(HttpStatus.CREATED).body(responseOk);
     }
 
+
+    @Operation(
+            summary = "Validate user code",
+            description = "Verification code from user's email",
+            tags = {"Registration"},
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    description = "Validate person code",
+                    required = true,
+                    content = @Content(
+                            schema = @Schema(implementation = RegistrationDto.class)
+                    )
+            ),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Success",
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = CustomResponse.class)
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Custom Error",
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = CustomResponse.class)
+                            )
+                    )
+            }
+    )
     @PostMapping(path = "/confirmation")
     public ResponseEntity<?> confirmRegistration(@Valid @RequestBody RegistrationToken registrationToken) {
 
         ExpPerson person = personService.findByPerVerificationCode(registrationToken.verificationCode())
-                .orElseThrow(() -> new NotFoundException(ErrorCode.NOT_FOUND.getCode(),
+                .orElseThrow(() -> new NotFoundException(MessageCode.NOT_FOUND.getCode(),
                         "User has been removed from the database. Please register again",
                         RegistrationController.class.getName(),
                         false));
 
         if(person.getIsEnabled()){
-            throw new DuplicateException(ErrorCode.ALREADY_EXIST.getCode(),
+            throw new DuplicateException(MessageCode.ALREADY_EXIST.getCode(),
                     "User already registered. Please redirect to login page",
                     RegistrationController.class.getName());
         }else{
@@ -56,7 +128,14 @@ public class RegistrationController {
         }
 
         personService.newPersonEnabled(person);
-        return ResponseEntity.ok("User registration successfully confirmed");
+
+        CustomResponse responseOk = CustomResponse.builder()
+                .code(MessageCode.SUCCESS.getCode())
+                .customMessage("User registration successfully confirmed")
+                .path("/register")
+                .build();
+
+        return ResponseEntity.status(HttpStatus.OK).body(responseOk);
 
     }
 }

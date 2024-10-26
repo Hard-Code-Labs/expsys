@@ -2,7 +2,7 @@ package ec.com.expensys.service;
 
 import ec.com.expensys.config.security.PEMUtils;
 import ec.com.expensys.web.exception.DecryptException;
-import ec.com.expensys.web.exception.ErrorCode;
+import ec.com.expensys.web.exception.MessageCode;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.BadPaddingException;
@@ -36,8 +36,8 @@ public class CryptoService {
         }catch (NoSuchPaddingException | NoSuchAlgorithmException | InvalidKeyException |
                 IllegalBlockSizeException | BadPaddingException | IllegalArgumentException e){
 
-            throw new DecryptException(ErrorCode.DECRYPT_ERROR.getCode(),
-                    ErrorCode.DECRYPT_ERROR.getMessageTemplate(),
+            throw new DecryptException(MessageCode.DECRYPT_ERROR.getCode(),
+                    MessageCode.DECRYPT_ERROR.getMessageTemplate(),
                     CryptoService.class.getName(),
                     true,
                     e.getLocalizedMessage());
