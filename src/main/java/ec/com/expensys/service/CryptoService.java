@@ -3,6 +3,7 @@ package ec.com.expensys.service;
 import ec.com.expensys.config.security.PEMUtils;
 import ec.com.expensys.web.exception.DecryptException;
 import ec.com.expensys.web.exception.MessageCode;
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -21,10 +22,13 @@ public class CryptoService {
     @Value("${constant.privateKeyPath}")
     private String PRIVATE_KEY_PATH;
 
-    private final PrivateKey pemPrivateKey;
+    private PrivateKey pemPrivateKey;
 
-    public CryptoService() throws Exception {
-        this.pemPrivateKey = PEMUtils.loadPrivateKey(PRIVATE_KEY_PATH);
+    public CryptoService() {}
+
+    @PostConstruct
+    public void init() throws Exception{
+        pemPrivateKey = PEMUtils.loadPrivateKey(PRIVATE_KEY_PATH);
     }
 
     public String decrypt(String encryptMsg) {

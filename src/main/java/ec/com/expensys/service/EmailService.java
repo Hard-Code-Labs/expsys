@@ -8,6 +8,7 @@ import ec.com.expensys.web.exception.MessageCode;
 import ec.com.expensys.web.exception.MailSenderException;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
+import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -25,11 +26,15 @@ public class EmailService {
     private String RESEND_API_KEY;
 
     private final FreeMarkerConfigurer configurer;
-
-    Resend resend = new Resend(RESEND_API_KEY);
+    private Resend resend;
 
     public EmailService(FreeMarkerConfigurer configurer) {
         this.configurer = configurer;
+    }
+
+    @PostConstruct
+    public void init(){
+         resend = new Resend(RESEND_API_KEY);
     }
 
     public void sendEmail(String to, String subject, Map<String, Object> data, String mailTemplateName) {

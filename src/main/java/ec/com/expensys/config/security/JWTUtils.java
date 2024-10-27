@@ -6,6 +6,7 @@ import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.auth0.jwt.interfaces.JWTVerifier;
 import ec.com.expensys.web.exception.InvalidTokenException;
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -18,10 +19,13 @@ public class JWTUtils {
     @Value("${constant.jwtsecret}")
     private String SECRET;
 
-    private final Algorithm algorithm;
-    private final JWTVerifier verifier;
+    private Algorithm algorithm;
+    private JWTVerifier verifier;
 
-    public JWTUtils() {
+    public JWTUtils() {}
+
+    @PostConstruct
+    public void init(){
         this.algorithm = Algorithm.HMAC256(SECRET);
         this.verifier = JWT.require(algorithm)
                 .withIssuer("moneyatic")
