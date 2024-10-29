@@ -1,7 +1,7 @@
 package ec.com.expensys.web.controller;
 
 import ec.com.expensys.service.ExpPersonService;
-import ec.com.expensys.service.dto.ExpPersonDto;
+import ec.com.expensys.web.record.PersonDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +20,7 @@ public class ExpPersonController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ExpPersonDto>> findAll(){
+    public ResponseEntity<List<PersonDto>> findAll(){
          return ResponseEntity.ok(expPersonService.findAll());
     }
 }

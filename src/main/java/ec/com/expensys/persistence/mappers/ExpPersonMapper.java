@@ -1,8 +1,7 @@
 package ec.com.expensys.persistence.mappers;
 
 import ec.com.expensys.persistence.entity.ExpPerson;
-import ec.com.expensys.service.dto.ExpPersonDto;
-import ec.com.expensys.service.dto.RegistrationDto;
+import ec.com.expensys.web.record.PersonDto;
 import org.mapstruct.InheritInverseConfiguration;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -15,12 +14,9 @@ public interface ExpPersonMapper {
 
     //Convertir de Entity a DTO
     @Mapping(source = "expCountry.ctrId", target = "countryId")
-    ExpPersonDto toPersonDto(ExpPerson expPerson);
+    PersonDto toPersonDto(ExpPerson expPerson);
 
-    @Mapping(source = "expCountry.ctrId", target = "countryId")
-    RegistrationDto toRegistrationDto(ExpPerson expPerson);
-
-    List<ExpPersonDto> toPersonsDto(List<ExpPerson> expPersons);
+    List<PersonDto> toPersonsDto(List<ExpPerson> expPersons);
 
 
     //Convertir de DTO a Entity
@@ -32,16 +28,7 @@ public interface ExpPersonMapper {
     @Mapping(target = "roleList", ignore = true)
     @Mapping(target = "expCategories", ignore = true)
     @Mapping(target = "expTransactions", ignore = true)
-    ExpPerson toExpPerson(ExpPersonDto expPersonDto);
-
-    @InheritInverseConfiguration
-    @Mapping(target = "perId", ignore = true)
-    @Mapping(target = "lastAccess", ignore = true)
-    @Mapping(target = "perPassword", ignore = true)
-    @Mapping(target = "roleList", ignore = true)
-    @Mapping(target = "expCategories", ignore = true)
-    @Mapping(target = "expTransactions", ignore = true)
-    ExpPerson toExpPerson(RegistrationDto registrationDto);
+    ExpPerson toPerson(PersonDto personDto);
 }
 
 

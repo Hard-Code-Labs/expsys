@@ -10,11 +10,11 @@ import ec.com.expensys.persistence.repository.ExpCountryRepository;
 import ec.com.expensys.persistence.repository.ExpPersonRepository;
 import ec.com.expensys.persistence.repository.ExpRolePersonRepository;
 import ec.com.expensys.persistence.repository.ExpRoleRepository;
-import ec.com.expensys.service.dto.ExpPersonDto;
-import ec.com.expensys.service.dto.RegistrationDto;
 import ec.com.expensys.web.exception.DuplicateException;
 import ec.com.expensys.web.exception.MessageCode;
 import ec.com.expensys.web.exception.NotFoundException;
+import ec.com.expensys.web.record.PersonDto;
+import ec.com.expensys.web.record.RegisterDto;
 import ec.com.expensys.web.utils.RoleEnum;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
@@ -65,25 +65,25 @@ public class ExpPersonService {
         this.jwtUtils = jwtUtils;
     }
 
-    public List<ExpPersonDto> findAll(){
+    public List<PersonDto> findAll(){
         List<ExpPerson> result = expPersonRepository.findAll();
         return expPersonMapper.toPersonsDto(result);
     }
 
 
     @Transactional
-    public void registerNewPerson(RegistrationDto person) {
+    public void registerNewPerson(RegisterDto person) {
 
-        if(emailExists(person.getPerMail())){
+        if(emailExists(person.perMail())){
             throw new DuplicateException(MessageCode.ALREADY_EXIST.getCode(),
                     "Email already exists.",
                     ExpPerson.class.getName());
         }
 
         String decryptPassword = decryptPassword(person);
-        String tokenOnRegister = jwtUtils.createOnRegister(person.getPerMail());
+        String tokenOnRegister = jwtUtils.createOnRegister(person.perMail());
 
-        ExpCountry personCountry = expCountryRepository.findById(person.getCountryId())
+        ExpCountry personCountry = expCountryRepository.findById(person.countryId())
                 .orElseThrow(() -> new NotFoundException(MessageCode.NOT_FOUND.getCode(),
                                 "Country not found by id",
                                 ExpPersonService.class.getName(),
@@ -92,25 +92,24 @@ public class ExpPersonService {
         ExpPerson personSaved = saveNewPerson(person,decryptPassword,personCountry,tokenOnRegister);
 
         saveNewRolePerson(RoleEnum.BASIC,personSaved);
-        sendMailToVerifyAccount(personSaved);
 
-        expPersonMapper.toPersonDto(personSaved);
+        sendMailToVerifyAccount(personSaved);
     }
 
     private boolean emailExists(final String email) {
         return expPersonRepository.findByPerMail(email) != null;
     }
 
-    private String decryptPassword(RegistrationDto person){
-        return cryptoService.decrypt(person.getPerPassword());
+    private String decryptPassword(RegisterDto person){
+        return cryptoService.decrypt(person.perPassword());
     }
 
-    private ExpPerson saveNewPerson(RegistrationDto person, String password, ExpCountry country, String tokenOnRegister){
+    private ExpPerson saveNewPerson(RegisterDto person, String password, ExpCountry country, String tokenOnRegister){
         ExpPerson personToSave = new ExpPerson();
         personToSave.setPerUUID(UUID.randomUUID());
-        personToSave.setPerMail(person.getPerMail());
-        personToSave.setPerName(person.getPerName());
-        personToSave.setPerLastname(person.getPerLastname());
+        personToSave.setPerMail(person.perMail());
+        personToSave.setPerName(person.perName());
+        personToSave.setPerLastname(person.perLastname());
         personToSave.setPerPassword(passwordEncoder.encode(password));
         personToSave.setIsEnabled(false);
         personToSave.setExpCountry(country);

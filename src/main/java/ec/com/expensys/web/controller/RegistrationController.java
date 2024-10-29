@@ -4,9 +4,9 @@ import com.auth0.jwt.exceptions.TokenExpiredException;
 import ec.com.expensys.config.security.JWTUtils;
 import ec.com.expensys.persistence.entity.ExpPerson;
 import ec.com.expensys.service.ExpPersonService;
-import ec.com.expensys.service.dto.RegistrationDto;
 import ec.com.expensys.service.record.RegistrationToken;
 import ec.com.expensys.web.exception.*;
+import ec.com.expensys.web.record.RegisterDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @RestController
 @RequestMapping("/v1/register")
-@Tag(name = "Registration", description = "Controller for register new users.")
+@Tag(name = "Registration", description = "Endpoint for register new users.")
 public class RegistrationController {
 
     private final ExpPersonService personService;
@@ -40,7 +40,7 @@ public class RegistrationController {
                     description = "Register new person",
                     required = true,
                     content = @Content(
-                            schema = @Schema(implementation = RegistrationDto.class)
+                            schema = @Schema(implementation = RegisterDto.class)
                     )
             ),
             responses = {
@@ -63,7 +63,7 @@ public class RegistrationController {
             }
     )
     @PostMapping("")
-    public ResponseEntity<CustomResponse> register(@Valid @RequestBody RegistrationDto personDto){
+    public ResponseEntity<CustomResponse> register(@Valid @RequestBody RegisterDto personDto){
         personService.registerNewPerson(personDto);
         CustomResponse responseOk = CustomResponse.builder()
                 .code(MessageCode.CREATED.getCode())
@@ -82,7 +82,7 @@ public class RegistrationController {
                     description = "Validate person code",
                     required = true,
                     content = @Content(
-                            schema = @Schema(implementation = RegistrationDto.class)
+                            schema = @Schema(implementation = RegistrationToken.class)
                     )
             ),
             responses = {
@@ -109,7 +109,7 @@ public class RegistrationController {
 
         ExpPerson person = personService.findByPerVerificationCode(registrationToken.verificationCode())
                 .orElseThrow(() -> new NotFoundException(MessageCode.NOT_FOUND.getCode(),
-                        "User has been removed from the database. Please register again",
+                        "Verification code not found. User has been removed from the database. Please register again",
                         RegistrationController.class.getName(),
                         false));
 
@@ -136,6 +136,5 @@ public class RegistrationController {
                 .build();
 
         return ResponseEntity.status(HttpStatus.OK).body(responseOk);
-
     }
 }
