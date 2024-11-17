@@ -1,4 +1,4 @@
-package ec.com.expensys.service.dto;
+package ec.com.expensys.dto;
 
 import lombok.Builder;
 import lombok.Getter;
