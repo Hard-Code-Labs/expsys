@@ -1,6 +1,6 @@
 package ec.com.expensys.service;
 
-import ec.com.expensys.config.security.PEMUtils;
+import ec.com.expensys.security.PEMUtils;
 import ec.com.expensys.web.exception.DecryptException;
 import ec.com.expensys.web.exception.MessageCode;
 import jakarta.annotation.PostConstruct;

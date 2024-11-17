@@ -1,7 +1,7 @@
 package ec.com.expensys.persistence.mappers;
 
 import ec.com.expensys.persistence.entity.ExpPerson;
-import ec.com.expensys.web.record.PersonDto;
+import ec.com.expensys.dto.PersonDto;
 import org.mapstruct.InheritInverseConfiguration;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

@@ -1,4 +1,4 @@
-package ec.com.expensys.config.security;
+package ec.com.expensys.security;
 
 import org.springframework.core.io.ClassPathResource;
 

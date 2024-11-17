@@ -1,12 +1,12 @@
 package ec.com.expensys.web.controller;
 
 import com.auth0.jwt.exceptions.TokenExpiredException;
-import ec.com.expensys.config.security.JWTUtils;
+import ec.com.expensys.security.JWTUtils;
 import ec.com.expensys.persistence.entity.ExpPerson;
 import ec.com.expensys.service.ExpPersonService;
-import ec.com.expensys.service.record.RegistrationToken;
+import ec.com.expensys.dto.RegistrationToken;
 import ec.com.expensys.web.exception.*;
-import ec.com.expensys.web.record.RegisterDto;
+import ec.com.expensys.dto.RegisterDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;

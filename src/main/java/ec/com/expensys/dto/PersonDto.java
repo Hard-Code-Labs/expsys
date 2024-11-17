@@ -1,4 +1,4 @@
-package ec.com.expensys.web.record;
+package ec.com.expensys.dto;
 
 import lombok.Builder;
 

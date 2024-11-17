@@ -1,4 +1,4 @@
-package ec.com.expensys.config.security;
+package ec.com.expensys.security;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;

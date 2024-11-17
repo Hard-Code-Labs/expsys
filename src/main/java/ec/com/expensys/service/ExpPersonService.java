@@ -1,6 +1,6 @@
 package ec.com.expensys.service;
 
-import ec.com.expensys.config.security.JWTUtils;
+import ec.com.expensys.security.JWTUtils;
 import ec.com.expensys.persistence.entity.ExpCountry;
 import ec.com.expensys.persistence.entity.ExpPerson;
 import ec.com.expensys.persistence.entity.ExpRole;
@@ -13,8 +13,8 @@ import ec.com.expensys.persistence.repository.ExpRoleRepository;
 import ec.com.expensys.web.exception.DuplicateException;
 import ec.com.expensys.web.exception.MessageCode;
 import ec.com.expensys.web.exception.NotFoundException;
-import ec.com.expensys.web.record.PersonDto;
-import ec.com.expensys.web.record.RegisterDto;
+import ec.com.expensys.dto.PersonDto;
+import ec.com.expensys.dto.RegisterDto;
 import ec.com.expensys.web.utils.RoleEnum;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;

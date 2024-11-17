@@ -1,4 +1,4 @@
-package ec.com.expensys.service.record;
+package ec.com.expensys.dto;
 
 import jakarta.validation.constraints.NotBlank;
 

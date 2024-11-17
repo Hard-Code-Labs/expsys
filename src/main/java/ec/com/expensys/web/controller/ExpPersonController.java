@@ -1,7 +1,7 @@
 package ec.com.expensys.web.controller;
 
 import ec.com.expensys.service.ExpPersonService;
-import ec.com.expensys.web.record.PersonDto;
+import ec.com.expensys.dto.PersonDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
