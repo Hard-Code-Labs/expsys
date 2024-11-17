@@ -28,13 +28,13 @@ public class ExpPerson extends AuditableEntity implements Serializable {
     @Column(name = "per_mail", nullable = false, length = 100, unique = true)
     private String perMail;
 
-    @Column(name = "per_name", nullable = false, length = 60)
+    @Column(name = "per_name", nullable = false, length = 30)
     private String perName;
 
-    @Column(name = "per_lastname",nullable = false, length = 60)
+    @Column(name = "per_lastname",nullable = false, length = 30)
     private String perLastname;
 
-    @Column(name = "per_password",nullable = false)
+    @Column(name = "per_password",nullable = false, length = 60)
     private String perPassword;
 
     @Column(name = "per_avatar")

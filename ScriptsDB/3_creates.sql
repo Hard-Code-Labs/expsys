@@ -42,9 +42,9 @@ CREATE TABLE exp.exp_person (
     per_id INTEGER NOT NULL DEFAULT nextval('exp.exp_person_sq') PRIMARY KEY,
     per_uuid UUID NOT NULL,
     per_mail VARCHAR(100) NOT NULL,
-    per_name VARCHAR(60) NOT NULL,
-    per_lastname VARCHAR(60) NOT NULL,
-    per_password VARCHAR NOT NULL,
+    per_name VARCHAR(30) NOT NULL,
+    per_lastname VARCHAR(30) NOT NULL,
+    per_password VARCHAR(60) NOT NULL,
     per_avatar bytea,
     per_last_access TIMESTAMP,
     per_verification_code VARCHAR(3000),
@@ -55,6 +55,8 @@ CREATE TABLE exp.exp_person (
     is_delete BOOLEAN NOT NULL DEFAULT false,
     FOREIGN KEY (ctr_id) REFERENCES exp.exp_country (ctr_id)
 );
+
+COMMENT ON COLUMN exp.exp_person.per_password IS 'Bcrypt support max 72 char';
 
 CREATE TABLE exp.exp_role_person (
   rop_id INTEGER NOT NULL DEFAULT nextval('exp.exp_role_person_sq') PRIMARY KEY,
