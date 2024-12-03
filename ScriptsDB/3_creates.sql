@@ -1,16 +1,16 @@
-drop table exp.exp_transaction cascade;
-drop table exp.exp_person_category cascade;
-drop table exp.exp_country cascade;
-drop table exp.exp_role_person cascade;
-drop table exp.exp_person cascade;
-drop table exp.exp_role cascade;
+-- drop table exp.exp_transaction cascade;
+-- drop table exp.exp_person_category cascade;
+-- drop table exp.exp_country cascade;
+-- drop table exp.exp_role_person cascade;
+-- drop table exp.exp_person cascade;
+-- drop table exp.exp_role cascade;
 
-drop sequence exp.exp_transaction_sq cascade;
-drop sequence exp.exp_person_category_sq cascade;
-drop sequence exp.exp_country_sq cascade;
-drop sequence exp.exp_role_person_sq cascade;
-drop sequence exp.exp_person_sq cascade;
-drop sequence exp.exp_role_sq cascade;
+-- drop sequence exp.exp_transaction_sq cascade;
+-- drop sequence exp.exp_person_category_sq cascade;
+-- drop sequence exp.exp_country_sq cascade;
+-- drop sequence exp.exp_role_person_sq cascade;
+-- drop sequence exp.exp_person_sq cascade;
+-- drop sequence exp.exp_role_sq cascade;
 
 --sequences
 CREATE SEQUENCE exp.exp_transaction_sq START WITH 1 INCREMENT 1;

@@ -3,75 +3,39 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Email Confirm</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto+Flex:wght@400;700&display=swap" rel="stylesheet">
-    <style>
-        body {
-            background: linear-gradient(63.36deg, #0C1314 9.43%, #11594E 75.57%, #00BE99 99.87%);
-            width: 100vw;
-            height: 100vh;
-            color: white;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-family: 'Roboto Flex', sans-serif;
-        }
-        main {
-            width: 550px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            gap: 20px;
-            background-color: #040f10b0;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 0 10px #cdfeec;
-            border: 1px solid white;
-            border-radius: 50px;
-            padding: 50px;
-        }
-        h1 {
-            margin: 1px 0;
-        }
-        section {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-        .button {
-            width: 70%;
-            padding: 15px;
-            border-radius: 50px;
-            border: none;
-            background-color: #00BE99;
-            color: white;
-            font-size: large;
-            font-weight: bold;
-            text-decoration: none;
-            opacity: 1;
-            transition: opacity 0.5s;
-        }
-    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 </head>
-<body>
-<main>
-    <h2>Hola ${perName}</h2>
-    <h1>¡Bienvenido a Moneyatic! </h1>
-    <h4>Para activar tu cuenta y empezar a disfrutar de nuestros servicios, solo necesitas confirmar tu dirección de correo electrónico. Haz clic en Confirmar</h4>
-
-    <section >
-        <a
-                href=${URI}
-                target="_blank"
-                class="button"
-        >
-            Confirmar mi email
-        </a>
-    </section>
-
-    <p>¡Gracias por unirte a Moneyatic!
-        Si tienes alguna pregunta, no dudes en contactarnos.</p>
-</main>
+<body style="margin: 0; padding: 0; background-color: #B0B3B5; color: white; font-family: 'Roboto', sans-serif;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color: #B0B3B5; text-align: center; padding: 20px;">
+    <tr>
+        <td align="center">
+            <table role="presentation" width="550" cellpadding="0" cellspacing="0" style="background-color: #122629; border-radius: 16px; overflow: hidden; box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.25);">
+                <tr>
+                    <td style="padding: 40px; text-align: center;">
+                        <!-- Saludo -->
+                        <h1 style="margin: 0; color: #00BE99; font-weight: 700; font-size: 24px;">¡Bienvenido a Moneyatic!</h1>
+                        <p style="color: #D9D9D9; font-size: 16px; margin-top: 20px; line-height: 1.5;">
+                            Hola ${perName}, para activar tu cuenta y empezar a disfrutar de nuestros servicios, solo necesitas confirmar tu dirección de correo electrónico.
+                            <br>Haz clic en el botón a continuación:
+                        </p>
+                        <!-- Botón -->
+                        <a href="${URI}" target="_blank" style="display: inline-block; margin-top: 30px; padding: 14px 32px; background-color: #00BE99; color: white; text-decoration: none; border-radius: 32px; font-weight: 700; font-size: 16px; transition: background-color 0.3s ease, transform 0.2s ease; box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.25);">
+                            Confirmar mi email
+                        </a>
+                        <p style="color: #B0B0B0; font-size: 14px; margin-top: 30px;">
+                            Si tienes alguna pregunta, no dudes en <a href="mailto:soporte@moneyatic.com" style="color: #00BE99; text-decoration: none;">contactarnos</a>.
+                        </p>
+                    </td>
+                </tr>
+                <!-- Pie -->
+                <tr>
+                    <td style="background-color: #0E1E20; padding: 16px; text-align: center; color: #7F8C8D; font-size: 12px;">
+                        © 2024 Moneyatic. Todos los derechos reservados.
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
 </body>
 </html>
