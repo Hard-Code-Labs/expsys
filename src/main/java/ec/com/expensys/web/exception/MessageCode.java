@@ -13,7 +13,9 @@ public enum MessageCode {
     TOKEN_EXPIRED(4006,"Token expired."),
     TOKEN_INVALID(4007,"Error on processing token."),
     CREATED(2001,"Created."),
-    SUCCESS(2000,"Success."),;
+    SUCCESS(2000,"Success."),
+    SERVER_ERROR(5000,"Server internal error."),
+    PERSIST_ERROR(5001,"Database persist error."),;
 
     private final int code;
     private final String messageTemplate;
