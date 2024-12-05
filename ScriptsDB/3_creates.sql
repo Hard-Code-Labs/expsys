@@ -4,7 +4,7 @@
 -- drop table exp.exp_role_person cascade;
 -- drop table exp.exp_person cascade;
 -- drop table exp.exp_role cascade;
-
+--
 -- drop sequence exp.exp_transaction_sq cascade;
 -- drop sequence exp.exp_person_category_sq cascade;
 -- drop sequence exp.exp_country_sq cascade;
@@ -24,7 +24,7 @@ CREATE TABLE exp.exp_country (
  ctr_id INTEGER NOT NULL DEFAULT nextval('exp.exp_country_sq') PRIMARY KEY,
  ctr_acronym VARCHAR(2),
  ctr_name VARCHAR(200),
- ctr_icon BYTEA,
+ ctr_icon VARCHAR(5),
  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
  modified_at TIMESTAMP,
  is_delete BOOLEAN NOT NULL DEFAULT false

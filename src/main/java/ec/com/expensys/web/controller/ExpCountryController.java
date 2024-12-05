@@ -1,6 +1,6 @@
 package ec.com.expensys.web.controller;
 
-import ec.com.expensys.persistence.entity.ExpCountry;
+import ec.com.expensys.dto.CountryDto;
 import ec.com.expensys.service.ExpCountryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +18,7 @@ public class ExpCountryController {
     private final ExpCountryService expCountryService;
 
     @GetMapping
-    public ResponseEntity<List<ExpCountry>> findAll(){
+    public ResponseEntity<List<CountryDto>> findAll(){
         return ResponseEntity.ok(expCountryService.findAllActive());
     }
 

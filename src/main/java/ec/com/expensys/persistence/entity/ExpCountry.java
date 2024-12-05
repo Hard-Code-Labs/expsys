@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.io.Serializable;
-import java.util.List;
 
 @Entity
 @Getter
@@ -25,7 +24,6 @@ public class ExpCountry extends AuditableEntity implements Serializable {
     @Column(name = "ctr_name", length = 200, unique = true)
     private String ctrName;
 
-    @Lob
     @Column(name = "ctr_icon")
     private String ctrIcon;
 
