@@ -9,7 +9,7 @@ import org.mapstruct.MappingConstants;
 
 import java.util.List;
 
-@Mapper(componentModel = MappingConstants.ComponentModel.SPRING, uses = {ExpCountryMapper.class})
+@Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface ExpPersonMapper {
 
     //Convertir de Entity a DTO
@@ -28,6 +28,7 @@ public interface ExpPersonMapper {
     @Mapping(target = "roleList", ignore = true)
     @Mapping(target = "expCategories", ignore = true)
     @Mapping(target = "expTransactions", ignore = true)
+    @Mapping(target = "isDeleted", ignore = true)
     ExpPerson toPerson(PersonDto personDto);
 }
 

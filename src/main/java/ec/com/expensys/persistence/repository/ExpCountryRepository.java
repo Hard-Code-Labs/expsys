@@ -1,12 +1,8 @@
 package ec.com.expensys.persistence.repository;
 
 import ec.com.expensys.persistence.entity.ExpCountry;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.ListCrudRepository;
 
-import java.util.List;
-import java.util.Optional;
+public interface ExpCountryRepository extends ListCrudRepository<ExpCountry, Long> {
 
-public interface ExpCountryRepository extends CrudRepository<ExpCountry, Long> {
-
-    Optional<List<ExpCountry>> findAllAndIsDeletedFalse();
 }
