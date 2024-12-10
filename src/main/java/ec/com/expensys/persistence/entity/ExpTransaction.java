@@ -14,11 +14,12 @@ import java.util.UUID;
 @Getter
 @Setter
 @Table(name = "exp_transaction",schema = "exp")
+@SequenceGenerator(name = "exp_transaction_sq", sequenceName = "exp_transaction_sq", allocationSize = 1)
 public class ExpTransaction implements Serializable {
 
     @Id
     @Column(name = "trn_id", nullable = false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "exp_transaction_sq")
     private Long trnId;
 
     @UuidGenerator(style = UuidGenerator.Style.RANDOM)

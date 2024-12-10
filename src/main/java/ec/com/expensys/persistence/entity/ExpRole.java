@@ -1,5 +1,6 @@
 package ec.com.expensys.persistence.entity;
 
+import ec.com.expensys.web.utils.RoleEnum;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -11,15 +12,17 @@ import java.util.List;
 @Getter
 @Setter
 @Table(name = "exp_role",schema = "exp")
+@SequenceGenerator(name = "exp_role_sq", sequenceName = "exp_role_sq", allocationSize = 1)
 public class ExpRole extends AuditableEntity implements Serializable {
 
     @Id
     @Column(name = "rol_id", nullable = false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "exp_role_sq")
     private Long rolId;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "rol_name", nullable = false, length = 50)
-    private String rolName;
+    private RoleEnum rolName;
 
     @OneToMany(mappedBy = "expRole")//Va el nombre del objeto mapeado en Java. No en la BD
     private List<ExpRolePerson> roles;

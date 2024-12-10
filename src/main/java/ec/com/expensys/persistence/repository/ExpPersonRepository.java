@@ -1,7 +1,13 @@
 package ec.com.expensys.persistence.repository;
 
 import ec.com.expensys.persistence.entity.ExpPerson;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.ListCrudRepository;
 
-public interface ExpPersonRepository extends CrudRepository<ExpPerson, Integer> {
+import java.util.Optional;
+
+public interface ExpPersonRepository extends ListCrudRepository<ExpPerson, Long> {
+
+    ExpPerson findByPerMail(String perMail);
+    Optional<ExpPerson> findByPerVerificationCode(String perVerificationCode);
+
 }

@@ -13,11 +13,12 @@ import java.util.UUID;
 @Getter
 @Setter
 @Table(name = "exp_person", schema = "exp")
+@SequenceGenerator(name = "exp_person_sq", sequenceName = "exp_person_sq", allocationSize = 1)
 public class ExpPerson extends AuditableEntity implements Serializable {
 
     @Id
     @Column(name = "per_id", nullable = false)
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "exp_person_sq")
     private Long perId;
 
     @Column(name = "per_uuid", nullable = false, unique = true)
@@ -27,27 +28,33 @@ public class ExpPerson extends AuditableEntity implements Serializable {
     @Column(name = "per_mail", nullable = false, length = 100, unique = true)
     private String perMail;
 
-    @Column(name = "per_name", nullable = false, length = 60)
+    @Column(name = "per_name", nullable = false, length = 30)
     private String perName;
 
-    @Column(name = "per_lastname",nullable = false, length = 60)
+    @Column(name = "per_lastname",nullable = false, length = 30)
     private String perLastname;
 
-    @Column(name = "per_password",nullable = false, length = 255)
+    @Column(name = "per_password",nullable = false, length = 60)
     private String perPassword;
 
-    @Lob
     @Column(name = "per_avatar")
     private byte[] perAvatar;
 
-    @Column(name = "per_last_access",nullable = false, columnDefinition = "timestamp")
+    @Column(name = "per_last_access", columnDefinition = "timestamp")
     private LocalDateTime lastAccess;
+
+    @Column(name = "per_verification_code", length = 100)
+    private String perVerificationCode;
+
+    @Column(name = "per_enabled", nullable = false)
+    private Boolean isEnabled;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ctr_id", referencedColumnName = "ctr_id")
     private ExpCountry expCountry;
 
-    @OneToMany(mappedBy = "expPerson")
+    //Permite referenciar a todos los hijos relacionados
+    @OneToMany(mappedBy = "expPerson", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<ExpRolePerson> roleList;
 
     @OneToMany(mappedBy = "expPerson")

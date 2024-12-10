@@ -1,0 +1,25 @@
+version: '3.9'
+
+services:
+  virtual_postgres:
+    container_name: postgres_docker
+    image: postgres:16
+    restart: always
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata_docker:/var/lib/postgresql/data
+    networks:
+      - hardcodelabsnet
+
+networks:
+  hardcodelabsnet:
+    driver: bridge
+
+volumes:
+  pgdata_docker:
+    driver: local

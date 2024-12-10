@@ -1,23 +1,24 @@
-package ec.com.expensys.service.dto;
+package ec.com.expensys.dto;
 
-import ec.com.expensys.persistence.entity.ExpCountry;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.util.UUID;
 
 @Getter
 @Setter
 @Builder
+@ToString
 public class ExpPersonDto {
 
     private UUID perUUID;
     private final String perMail;
     private final String perName;
-    private final String perLastName;
-    private final String perPassword;
+    private final String perLastname;
+    private boolean isEnabled;
     private byte[] perAvatar;
-    private Long countryId;
+    private final Long countryId;
 
 }
