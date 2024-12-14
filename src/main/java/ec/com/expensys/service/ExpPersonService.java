@@ -63,7 +63,7 @@ public class ExpPersonService {
         }
 
         String decryptPassword = cryptoService.decrypt(person.perPassword());
-        String tokenOnRegister = jwtUtils.createOnRegister(person.perMail());
+        String tokenOnRegister = jwtUtils.getNewTokenOnRegister(person.perMail());
 
         ExpCountry personCountry = expCountryRepository.findById(person.countryId())
                 .orElseThrow(() -> new NotFoundException(MessageCode.NOT_FOUND.getCode(),
