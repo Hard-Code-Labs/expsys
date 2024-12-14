@@ -13,24 +13,23 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
+@RequiredArgsConstructor
+@PreAuthorize("permitAll()")
 @RequestMapping("/v1/register")
 @Tag(name = "Registration", description = "Endpoint for register new users.")
 public class RegistrationController {
 
     private final ExpPersonService personService;
     private final JWTUtils jwtUtils;
-
-    public RegistrationController(ExpPersonService personService, JWTUtils jwtUtils) {
-        this.personService = personService;
-        this.jwtUtils = jwtUtils;
-    }
 
     @Operation(
             summary = "Register new user",
@@ -119,7 +118,7 @@ public class RegistrationController {
                     RegistrationController.class.getName());
         }else{
             try {
-                jwtUtils.validateToken(person.getPerVerificationCode());
+                jwtUtils.verifyToken(person.getPerVerificationCode());
             } catch (TokenExpiredException e) {
 
                 personService.deletePerson(person);
