@@ -28,7 +28,7 @@ public class ExpRolePerson extends AuditableEntity implements Serializable {
     @Column(name = "rop_end_date", columnDefinition = "timestamp")
     private LocalDate ropEndDate;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "rol_id", referencedColumnName = "rol_id")
     private ExpRole expRole;
 
@@ -37,4 +37,12 @@ public class ExpRolePerson extends AuditableEntity implements Serializable {
     private ExpPerson expPerson;
 
     public ExpRolePerson() {}
+
+    @Override
+    public String toString() {
+        return "ExpRolePerson{" +
+                "ropId=" + ropId +
+                ", ropActive=" + ropActive +
+                '}';
+    }
 }

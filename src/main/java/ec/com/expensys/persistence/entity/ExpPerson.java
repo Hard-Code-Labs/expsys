@@ -53,14 +53,13 @@ public class ExpPerson extends AuditableEntity implements Serializable {
     @JoinColumn(name = "ctr_id", referencedColumnName = "ctr_id")
     private ExpCountry expCountry;
 
-    //Permite referenciar a todos los hijos relacionados
-    @OneToMany(mappedBy = "expPerson", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "expPerson", fetch = FetchType.EAGER)
     private List<ExpRolePerson> roleList;
 
     @OneToMany(mappedBy = "expPerson")
     private List<ExpPersonCategory> expCategories;
 
-    @OneToMany(mappedBy = "expPerson",fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "expPerson",fetch = FetchType.LAZY)
     private List<ExpTransaction> expTransactions;
 
     public ExpPerson() {}

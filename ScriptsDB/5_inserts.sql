@@ -29,6 +29,27 @@ VALUES
        ('BASIC', CURRENT_TIMESTAMP, null,false),
        ('DEVELOPER', CURRENT_TIMESTAMP, null,false);
 
+-- Inserts para la tabla exp.permission
+INSERT INTO exp.exp_permission (prm_name, created_at, modified_at, is_delete)
+VALUES ('READ',CURRENT_TIMESTAMP,null,false),
+ ('CREATE',CURRENT_TIMESTAMP,null,false),
+ ('UPDATE',CURRENT_TIMESTAMP,null,false),
+ ('DELETE',CURRENT_TIMESTAMP,null,false);
+
+--Inserts para la tabla exp.role_permission
+INSERT INTO exp.exp_role_permission (prm_id, rol_id, created_at, modified_at, is_delete) VALUES
+(1,1,CURRENT_TIMESTAMP,null,false),
+(2,1,CURRENT_TIMESTAMP,null,false),
+(3,1,CURRENT_TIMESTAMP,null,false),
+(4,1,CURRENT_TIMESTAMP,null,false),
+(1,2,CURRENT_TIMESTAMP,null,false),
+(2,2,CURRENT_TIMESTAMP,null,false),
+(3,2,CURRENT_TIMESTAMP,null,false),
+(1,3,CURRENT_TIMESTAMP,null,false),
+(2,3,CURRENT_TIMESTAMP,null,false),
+(3,3,CURRENT_TIMESTAMP,null,false),
+(4,3,CURRENT_TIMESTAMP,null,false);
+
 -- Common categories
 INSERT INTO exp.exp_person_category (cat_name, cat_type,cat_icon, cat_editable, per_id, created_at,modified_at, is_delete)
 VALUES
