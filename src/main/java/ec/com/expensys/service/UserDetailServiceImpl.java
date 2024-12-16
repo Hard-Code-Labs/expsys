@@ -1,6 +1,8 @@
 package ec.com.expensys.service;
 
-import ec.com.expensys.dto.AuthDto;
+import com.auth0.jwt.interfaces.DecodedJWT;
+import ec.com.expensys.dto.TokenResponseDto;
+import ec.com.expensys.dto.LoginRequestDto;
 import ec.com.expensys.persistence.entity.ExpPerson;
 import ec.com.expensys.persistence.repository.ExpPersonRepository;
 import ec.com.expensys.security.JWTUtils;
@@ -32,20 +34,37 @@ public class UserDetailServiceImpl implements UserDetailsService {
     private final ExpPersonRepository personRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public String getTokenToLoginUser(AuthDto personDto) {
-        Authentication authentication = authenticate(personDto);
+    public TokenResponseDto getTokenToLoginUser(LoginRequestDto loginRequestDto) {
+        Authentication authentication = authenticate(loginRequestDto);
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        return jwtUtils.getNewToken(authentication);
+        String accessToken = jwtUtils.getNewAccessToken(authentication);
+        String refreshToken = jwtUtils.getNewRefreshToken(authentication);
+
+        return new TokenResponseDto(accessToken, refreshToken);
     }
 
-    private Authentication authenticate(AuthDto personDto) {
-        UserDetails userDetail = loadUserByUsername(personDto.username());
+    public TokenResponseDto refreshToken(String tokenToRefresh) {
+        DecodedJWT decodedJWT = jwtUtils.verifyToken(tokenToRefresh);
+        String username = jwtUtils.getUsernameFromToken(decodedJWT);
 
-        if (!passwordEncoder.matches(personDto.password(), userDetail.getPassword())) {
+        UserDetails userDetail = loadUserByUsername(username);
+        Authentication userAuthenticated = new UsernamePasswordAuthenticationToken(userDetail, userDetail.getPassword(), userDetail.getAuthorities());
+
+        SecurityContextHolder.getContext().setAuthentication(userAuthenticated);
+        String accessToken = jwtUtils.getNewAccessToken(userAuthenticated);
+        String refreshToken = jwtUtils.getNewRefreshToken(userAuthenticated);
+
+        return new TokenResponseDto(accessToken, refreshToken);
+    }
+
+
+    private Authentication authenticate(LoginRequestDto loginRequestDto) {
+        UserDetails userDetail = loadUserByUsername(loginRequestDto.username());
+
+        if (!passwordEncoder.matches(loginRequestDto.password(), userDetail.getPassword())) {
             throw new AuthenticationServiceException("Invalid username/password supplied");
         }
-
 
         return new UsernamePasswordAuthenticationToken(userDetail, userDetail.getPassword(), userDetail.getAuthorities());
     }
@@ -61,10 +80,11 @@ public class UserDetailServiceImpl implements UserDetailsService {
         authorities.addAll(loadPermissions(person));
 
         return new User(person.getPerMail(),
-                person.getPerPassword(), true,
-                true,
-                true,
-                true, authorities);
+                person.getPerPassword(),
+                person.getIsEnabled(),
+                person.getIsEnabled(),
+                person.getIsEnabled(),
+                person.getIsEnabled(), authorities);
     }
 
     private List<SimpleGrantedAuthority> loadRoles(ExpPerson person) {

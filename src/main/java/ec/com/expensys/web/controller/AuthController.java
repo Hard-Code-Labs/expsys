@@ -1,9 +1,11 @@
 package ec.com.expensys.web.controller;
 
-import ec.com.expensys.dto.AuthDto;
+import com.auth0.jwt.interfaces.DecodedJWT;
+import ec.com.expensys.dto.TokenRequest;
+import ec.com.expensys.dto.TokenResponseDto;
+import ec.com.expensys.dto.LoginRequestDto;
+import ec.com.expensys.security.JWTUtils;
 import ec.com.expensys.service.UserDetailServiceImpl;
-import ec.com.expensys.web.exception.CustomResponse;
-import ec.com.expensys.web.exception.MessageCode;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -13,20 +15,24 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@PreAuthorize("permitAll()")
+@PreAuthorize("denyAll()")
 @RequestMapping("/v1/auth")
 public class AuthController {
 
     private final UserDetailServiceImpl userDetailService;
 
+
     @PostMapping("/login")
-    public ResponseEntity<CustomResponse> login(@Valid @RequestBody AuthDto personDto){
-        String tokenJWT = userDetailService.getTokenToLoginUser(personDto);
-        CustomResponse responseOk = CustomResponse.builder()
-                .code(MessageCode.SUCCESS.getCode())
-                .customMessage(tokenJWT)
-                .path("/auth")
-                .build();
-        return ResponseEntity.status(HttpStatus.OK).body(responseOk);
+    @PreAuthorize("permitAll()")
+    public ResponseEntity<TokenResponseDto> login(@Valid @RequestBody LoginRequestDto loginRequestDto){
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(userDetailService.getTokenToLoginUser(loginRequestDto));
+    }
+
+    @PostMapping("/refresh")
+    @PreAuthorize("hasAuthority('DELETE')")
+    public ResponseEntity<TokenResponseDto> refresh(@Valid @RequestBody TokenRequest tokenToRefresh){
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(userDetailService.refreshToken(tokenToRefresh.token()));
     }
 }

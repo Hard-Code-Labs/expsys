@@ -22,10 +22,10 @@ import java.util.stream.Collectors;
 @Component
 public class JWTUtils {
 
-    @Value("${constant.jwt.key.private}")
+    @Value("${security.jwt.key.private}")
     private String privateKey;
 
-    @Value("${constant.jwt.issuer}")
+    @Value("${security.jwt.issuer}")
     private String userGenerator;
 
     private Algorithm algorithm;
@@ -46,7 +46,7 @@ public class JWTUtils {
                 .sign(algorithm);
     }
 
-    public String getNewToken(Authentication authentication) {
+    public String getNewAccessToken(Authentication authentication) {
         String username = authentication.getName();
 
         String authorities = authentication.getAuthorities()
@@ -60,6 +60,19 @@ public class JWTUtils {
                 .withClaim("authorities",authorities)
                 .withIssuedAt(new Date())
                 .withExpiresAt(new Date(System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(30)))
+                .withJWTId(UUID.randomUUID().toString())
+                .withNotBefore(new Date(System.currentTimeMillis()))
+                .sign(algorithm);
+    }
+
+    public String getNewRefreshToken(Authentication authentication) {
+        String username = authentication.getName();
+
+        return JWT.create()
+                .withIssuer(this.userGenerator)
+                .withSubject(username)
+                .withIssuedAt(new Date())
+                .withExpiresAt(new Date(System.currentTimeMillis() + TimeUnit.DAYS.toMillis(1)))
                 .withJWTId(UUID.randomUUID().toString())
                 .withNotBefore(new Date(System.currentTimeMillis()))
                 .sign(algorithm);

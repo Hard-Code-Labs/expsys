@@ -4,7 +4,7 @@ import ec.com.expensys.validator.Trimmed;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 
-public record AuthDto(
+public record LoginRequestDto(
         @Trimmed
         @Email(message = "Invalid mail format")
         @NotBlank(message = "Mail cannot be empty")
