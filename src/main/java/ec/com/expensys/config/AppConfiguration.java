@@ -10,14 +10,14 @@ import org.springframework.core.io.ResourceLoader;
 @Configuration
 public class AppConfiguration {
 
-    @Autowired
-    ResourceLoader resourceLoader;
-
-    @Bean
-    public MessageSource messageSource() {
-        ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
-        messageSource.setBasename("classpath:messages_es_ES");
-        messageSource.setDefaultEncoding("UTF-8");
-        return messageSource;
-    }
+//    @Autowired
+//    ResourceLoader resourceLoader;
+//
+//    @Bean
+//    public MessageSource messageSource() {
+//        ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
+//        messageSource.setBasename("classpath:messages_es_ES");
+//        messageSource.setDefaultEncoding("UTF-8");
+//        return messageSource;
+//    }
 }

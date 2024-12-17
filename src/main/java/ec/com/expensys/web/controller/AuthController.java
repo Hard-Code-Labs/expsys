@@ -30,7 +30,7 @@ public class AuthController {
     }
 
     @PostMapping("/refresh")
-    @PreAuthorize("hasAuthority('DELETE')")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<TokenResponseDto> refresh(@Valid @RequestBody TokenRequest tokenToRefresh){
         return ResponseEntity.status(HttpStatus.OK)
                 .body(userDetailService.refreshToken(tokenToRefresh.token()));
