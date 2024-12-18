@@ -1,10 +1,8 @@
 package ec.com.expensys.web.controller;
 
-import com.auth0.jwt.interfaces.DecodedJWT;
 import ec.com.expensys.dto.TokenRequest;
 import ec.com.expensys.dto.TokenResponseDto;
 import ec.com.expensys.dto.LoginRequestDto;
-import ec.com.expensys.security.JWTUtils;
 import ec.com.expensys.service.UserDetailServiceImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

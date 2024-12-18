@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.UuidGenerator;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -14,12 +13,15 @@ import java.util.UUID;
 @Getter
 @Setter
 @Table(name = "exp_transaction",schema = "exp")
-@SequenceGenerator(name = "exp_transaction_sq", sequenceName = "exp_transaction_sq", allocationSize = 1)
-public class ExpTransaction implements Serializable {
+
+public class ExpTransaction {
+
+    private static final String SEQUENCE_NAME = "exp_transaction_sq";
 
     @Id
     @Column(name = "trn_id", nullable = false)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "exp_transaction_sq")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = SEQUENCE_NAME)
+    @SequenceGenerator(name = SEQUENCE_NAME, sequenceName = SEQUENCE_NAME, allocationSize = 1)
     private Long trnId;
 
     @UuidGenerator(style = UuidGenerator.Style.RANDOM)

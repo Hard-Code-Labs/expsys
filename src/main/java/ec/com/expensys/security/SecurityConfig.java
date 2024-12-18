@@ -1,6 +1,7 @@
 package ec.com.expensys.security;
 
 import ec.com.expensys.service.UserDetailServiceImpl;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -8,7 +9,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -33,11 +33,10 @@ import java.util.Arrays;
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
+@RequiredArgsConstructor
 public class SecurityConfig {
 
-
-    @Autowired
-    private JWTUtils jwtUtils;
+    private final JWTUtils jwtUtils;
 
     // Configuracion explicita sin anotaciones del @EnableMethodSecurity
 //    @Bean
@@ -68,7 +67,6 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity ) throws Exception {
             return httpSecurity
                     .csrf(AbstractHttpConfigurer::disable)
-                    .httpBasic(Customizer.withDefaults())// TODO solo para pruebas
                     .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                     .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                     .addFilterBefore(new JWTValidationFilter(jwtUtils), BasicAuthenticationFilter.class)
@@ -101,14 +99,9 @@ public class SecurityConfig {
 
     @Bean
     public PasswordEncoder getPasswordEncoder() {
+//        return NoOpPasswordEncoder.getInstance(); // Para pruebas
         return new BCryptPasswordEncoder();
     }
-
-    //Para hacer pruebas
-//    @Bean
-//    public PasswordEncoder getPasswordEncoderTest() {
-//        return NoOpPasswordEncoder.getInstance();
-//    }
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {

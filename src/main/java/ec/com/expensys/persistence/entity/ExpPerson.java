@@ -13,12 +13,14 @@ import java.util.UUID;
 @Getter
 @Setter
 @Table(name = "exp_person", schema = "exp")
-@SequenceGenerator(name = "exp_person_sq", sequenceName = "exp_person_sq", allocationSize = 1)
-public class ExpPerson extends AuditableEntity implements Serializable {
+public class ExpPerson extends AuditableEntity {
+
+    private static final String SEQUENCE_NAME = "exp_person_sq";
 
     @Id
     @Column(name = "per_id", nullable = false)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "exp_person_sq")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = SEQUENCE_NAME)
+    @SequenceGenerator(name = SEQUENCE_NAME, sequenceName = SEQUENCE_NAME, allocationSize = 1)
     private Long perId;
 
     @Column(name = "per_uuid", nullable = false, unique = true)

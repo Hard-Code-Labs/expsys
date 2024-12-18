@@ -13,5 +13,4 @@ public record LoginRequestDto(
         @Trimmed
         @NotBlank(message = "Password cannot be empty")
         String password
-) {
-}
+) { }

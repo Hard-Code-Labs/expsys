@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.io.Serializable;
 import java.util.List;
 
 @Entity
@@ -14,14 +13,14 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @Table(name = "exp_role",schema = "exp")
-public class ExpRole extends AuditableEntity implements Serializable {
+public class ExpRole extends AuditableEntity {
 
     private final static String SEQUENCE_NAME = "exp_role_seq";
 
     @Id
     @Column(name = "rol_id", nullable = false)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = SEQUENCE_NAME)
-    @SequenceGenerator(name = "", sequenceName = SEQUENCE_NAME, allocationSize = 1)
+    @SequenceGenerator(name = SEQUENCE_NAME, sequenceName = SEQUENCE_NAME, allocationSize = 1)
     private Long rolId;
 
     @Enumerated(EnumType.STRING)
