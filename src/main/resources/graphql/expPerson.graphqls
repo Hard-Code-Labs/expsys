@@ -1,0 +1,11 @@
+type Person{
+    perUUID: ID!
+    perMail: String!
+    perName: String!
+    perLastname: String!
+    isEnabled: Boolean!
+}
+
+type Query {
+    findPersonByMail(perMail: String) : Person
+}

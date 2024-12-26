@@ -1,6 +1,6 @@
 <h1 align="center" id="title">MoneyAtic</h1>
 
-<p id="description">Expenses System, aka 🤑Moneyatic🤪, is a backend side project I made with my bro
+<p id="description">Expenses System, aka 🤑Moneyatic🤪, is a backend side project I made with 
   <a href="https://github.com/Freddyz5">Freddy</a>
 on the frontend. It will allow you to control your expenses and incomes.</p>
 
@@ -27,7 +27,7 @@ Here're some of the project's best features:
 
 1. Clone the repository.
 2. Open the project with IntelliJ IDEA.
-3. Run the database scripts from the ScriptBD folder on your local PostgreSQL server.
+3. Run the database scripts from the ScriptBD folder on your local PostgreSQL server. <a href="https://app.chartdb.io/diagrams/vdevquw9sxua">Link to the interactive ER diagram</a> 
 4. Update the database connection settings.
 
 ## The process 
@@ -39,6 +39,9 @@ Technologies used in the project:
 *   Gradle
 *   Springboot 3.5
 *   PostgreSQL 16
+* Docker
+* Flyway
+* GraphQL
 
 ## License:
 

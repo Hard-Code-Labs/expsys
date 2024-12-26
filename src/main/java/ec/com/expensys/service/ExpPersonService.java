@@ -52,6 +52,10 @@ public class ExpPersonService {
         return expPersonMapper.toPersonsDto(result);
     }
 
+    public PersonDto findByMail(String mail) {
+        return expPersonMapper.toPersonDto(expPersonRepository.findByPerMail(mail));
+    }
+
 
     @Transactional
     public void registerNewPerson(RegisterDto person) {

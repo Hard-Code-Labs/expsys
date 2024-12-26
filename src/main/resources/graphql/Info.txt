@@ -1,0 +1,45 @@
+Tipos de datos de Graphql
+
+- Object Types
+Representan solo 1 tipo de objeto y son los componentes basicos. Se representan asi:
+type Person{
+    name: String!
+    appearsIn: [Department!]!
+}
+
+El signo de excalamacion (!) significa que el valor es obligatorio
+
+- Scalar Type
+Vienen predeterminados para equivaler al tipo de dato:
+    - Int: 32 bits con signo
+    - Float
+    - String: En UTF-8
+    - Boolean
+    - ID: ya es un tipo de dato para identificadores no legibles por humanos
+
+- Enumeration Type
+Similiar a los Enum, definen los datos a un conjunto de valores permitidos y finitos
+
+enum Meses{
+    ENERO,
+    FEBRERO,
+    DICIEMBRE
+}
+
+- Input Type
+Usado en mutaciones (crear, actualizar, eliminar).
+Hace referencia al esquema de entrada para por ejemplo crear
+un registro en la base de datos.
+input InputPersona{
+    nombre: String
+    apellido: String
+    edad: int
+    enabled: boolean
+}
+
+- Query Type
+Sirve para hacer consultas:
+type Query {
+    findPersonByMail(perMail: String)
+}
+ Ahora debemos definir nuestro objeto persona
