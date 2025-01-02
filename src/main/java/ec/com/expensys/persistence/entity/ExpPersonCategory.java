@@ -1,5 +1,6 @@
 package ec.com.expensys.persistence.entity;
 
+import ec.com.expensys.web.utils.TypeCategoryEnum;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -23,11 +24,9 @@ public class ExpPersonCategory extends AuditableEntity {
     @Column(name = "cat_name", nullable = false)
     private String catName;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "cat_type", nullable = false,length = 1)
-    private String catType;
-
-    @Column(name = "cat_editable", nullable = false)
-    private Boolean isEditable;
+    private TypeCategoryEnum catType;
 
     @Column(name = "cat_icon")
     private String catIcon;
