@@ -4,8 +4,5 @@ type Person{
     perName: String!
     perLastname: String!
     isEnabled: Boolean!
-}
-
-type Query {
-    findPersonByMail(perMail: String) : Person
+    categories: [PersonCategory!]
 }

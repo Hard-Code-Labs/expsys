@@ -1,0 +1,7 @@
+type Query {
+    allDataByPerMail(perMail: String!): Person
+
+    findPersonByMail(perMail: String) : Person
+
+    getAllCategoriesByPerson(perUUID: String!): [PersonCategory!]!
+}

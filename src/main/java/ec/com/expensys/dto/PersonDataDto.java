@@ -5,13 +5,14 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.List;
 import java.util.UUID;
 
 @Getter
 @Setter
 @Builder
 @ToString
-public class ExpPersonDto {
+public class PersonDataDto {
 
     private UUID perUUID;
     private final String perMail;
@@ -19,6 +20,6 @@ public class ExpPersonDto {
     private final String perLastname;
     private boolean isEnabled;
     private byte[] perAvatar;
-    private final Long countryId;
+    private List<PersonCategoryDto> categories;
 
 }

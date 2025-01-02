@@ -1,5 +1,6 @@
 package ec.com.expensys.persistence.mappers;
 
+import ec.com.expensys.dto.PersonDataDto;
 import ec.com.expensys.persistence.entity.ExpPerson;
 import ec.com.expensys.dto.PersonDto;
 import org.mapstruct.InheritInverseConfiguration;
@@ -12,13 +13,6 @@ import java.util.List;
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface ExpPersonMapper {
 
-    //Convertir de Entity a DTO
-    @Mapping(source = "expCountry.ctrId", target = "countryId")
-    PersonDto toPersonDto(ExpPerson expPerson);
-
-    List<PersonDto> toPersonsDto(List<ExpPerson> expPersons);
-
-
     //Convertir de DTO a Entity
     @InheritInverseConfiguration
     @Mapping(target = "perId", ignore = true)
@@ -30,6 +24,15 @@ public interface ExpPersonMapper {
     @Mapping(target = "expTransactions", ignore = true)
     @Mapping(target = "isDeleted", ignore = true)
     ExpPerson toPerson(PersonDto personDto);
+
+    //Convertir de Entity a DTO
+    @Mapping(source = "expCountry.ctrId", target = "countryId")
+    PersonDto toPersonDto(ExpPerson expPerson);
+
+    List<PersonDto> toPersonsDto(List<ExpPerson> expPersons);
+
+    @Mapping(target = "categories", ignore = true)
+    PersonDataDto toPersonDataDto(ExpPerson expPerson);
 }
 
 

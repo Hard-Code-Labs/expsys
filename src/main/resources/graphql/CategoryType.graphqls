@@ -1,0 +1,4 @@
+enum TypeCategory {
+    E
+    I
+}

@@ -1,0 +1,7 @@
+type PersonCategory {
+    catId: ID!
+    catName: String!
+    catType: TypeCategory!
+    catIcon: String!
+    isDeleted: Boolean!
+}
