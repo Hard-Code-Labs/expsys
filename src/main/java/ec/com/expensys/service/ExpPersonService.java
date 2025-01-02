@@ -141,6 +141,8 @@ public class ExpPersonService {
     public void newPersonEnabled(ExpPerson personUpdated) {
         personUpdated.setIsEnabled(true);
         expPersonRepository.save(personUpdated);
+        log.info("Set common categories to new person enabled: {}", personUpdated.getPerId());
+        expPersonRepository.createCategoriesByNewPerson(personUpdated.getPerId());
     }
 
     public void deletePerson(ExpPerson personToDelete) {

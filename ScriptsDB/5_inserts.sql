@@ -49,11 +49,3 @@ INSERT INTO exp.exp_role_permission (prm_id, rol_id, created_at, modified_at, is
 (2,3,CURRENT_TIMESTAMP,null,false),
 (3,3,CURRENT_TIMESTAMP,null,false),
 (4,3,CURRENT_TIMESTAMP,null,false);
-
--- Common categories
-INSERT INTO exp.exp_person_category (cat_name, cat_type,cat_icon, cat_editable, per_id, created_at,modified_at, is_delete)
-VALUES
-      ('Food', 'E',null, false, null, CURRENT_TIMESTAMP,null, false),
-      ('Internet', 'E',null, false, null, CURRENT_TIMESTAMP,null, false);
-
-
