@@ -58,7 +58,7 @@ public class ExpPerson extends AuditableEntity {
     @OneToMany(mappedBy = "expPerson", fetch = FetchType.EAGER)
     private List<ExpRolePerson> roleList;
 
-    @OneToMany(mappedBy = "expPerson")
+    @OneToMany(mappedBy = "expPerson", fetch = FetchType.LAZY)
     private List<ExpPersonCategory> expCategories;
 
     @OneToMany(mappedBy = "expPerson",fetch = FetchType.LAZY)
