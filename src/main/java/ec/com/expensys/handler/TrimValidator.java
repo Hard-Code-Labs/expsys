@@ -1,4 +1,4 @@
-package ec.com.expensys.validator;
+package ec.com.expensys.handler;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;

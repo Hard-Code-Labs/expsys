@@ -5,7 +5,7 @@ import ec.com.expensys.persistence.entity.ExpPerson;
 import ec.com.expensys.persistence.mappers.ExpPersonCategoryMapper;
 import ec.com.expensys.persistence.repository.ExpPersonCategoryRepository;
 import ec.com.expensys.persistence.repository.ExpPersonRepository;
-import ec.com.expensys.web.exception.MessageCode;
+import ec.com.expensys.web.utils.MessageCode;
 import ec.com.expensys.web.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

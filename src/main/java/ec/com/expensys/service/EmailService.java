@@ -4,7 +4,7 @@ import com.resend.Resend;
 import com.resend.core.exception.ResendException;
 import com.resend.services.emails.model.CreateEmailOptions;
 import com.resend.services.emails.model.CreateEmailResponse;
-import ec.com.expensys.web.exception.MessageCode;
+import ec.com.expensys.web.utils.MessageCode;
 import ec.com.expensys.web.exception.MailSenderException;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;

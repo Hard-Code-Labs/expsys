@@ -2,7 +2,7 @@ package ec.com.expensys.service;
 
 import ec.com.expensys.security.PEMUtils;
 import ec.com.expensys.web.exception.DecryptException;
-import ec.com.expensys.web.exception.MessageCode;
+import ec.com.expensys.web.utils.MessageCode;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;

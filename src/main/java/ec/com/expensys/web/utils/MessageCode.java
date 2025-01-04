@@ -1,4 +1,4 @@
-package ec.com.expensys.web.exception;
+package ec.com.expensys.web.utils;
 
 import lombok.Getter;
 

@@ -17,8 +17,7 @@ public interface ExpPersonRepository extends ListCrudRepository<ExpPerson, Long>
 
     Optional<ExpPerson> findByPerVerificationCode(String perVerificationCode);
 
-    @Query("SELECT p FROM ExpPerson p WHERE p.perMail =:mail AND p.isEnabled = true AND p.isDeleted = false")
-    Optional<ExpPerson> findActiveByMail(String mail);
+    Optional<ExpPerson> findByPerMailAndIsEnabledTrueAndIsDeletedFalse(String perMail);
 
     //Procedimiento almacenado que crea categorias cuando un usuario se da de alta
     @Procedure(value = "exp.createCategoriesByNewPerson")

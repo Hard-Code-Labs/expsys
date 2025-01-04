@@ -5,15 +5,13 @@ import ec.com.expensys.persistence.entity.ExpCountry;
 import ec.com.expensys.persistence.entity.ExpPerson;
 import ec.com.expensys.persistence.entity.ExpRole;
 import ec.com.expensys.persistence.entity.ExpRolePerson;
-import ec.com.expensys.persistence.mappers.ExpPersonMapper;
 import ec.com.expensys.persistence.repository.ExpCountryRepository;
 import ec.com.expensys.persistence.repository.ExpPersonRepository;
 import ec.com.expensys.persistence.repository.ExpRolePersonRepository;
 import ec.com.expensys.persistence.repository.ExpRoleRepository;
 import ec.com.expensys.web.exception.DuplicateException;
-import ec.com.expensys.web.exception.MessageCode;
+import ec.com.expensys.web.utils.MessageCode;
 import ec.com.expensys.web.exception.NotFoundException;
-import ec.com.expensys.dto.PersonDto;
 import ec.com.expensys.dto.RegisterDto;
 import ec.com.expensys.web.utils.RoleEnum;
 import jakarta.transaction.Transactional;
@@ -29,9 +27,7 @@ import java.util.*;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class ExpPersonService {
-
-    private final ExpPersonMapper expPersonMapper;
+public class RegistrationService {
 
     private final ExpRolePersonRepository expRolePersonRepository;
     private final ExpCountryRepository expCountryRepository;
@@ -45,17 +41,6 @@ public class ExpPersonService {
 
     @Value("${constant.url_redirect_after_register}")
     private String URL_REDIRECT_AFTER_REGISTER;
-
-
-    public List<PersonDto> findAll() {
-        List<ExpPerson> result = expPersonRepository.findAll();
-        return expPersonMapper.toPersonsDto(result);
-    }
-
-    public PersonDto findByMail(String mail) {
-        return expPersonMapper.toPersonDto(expPersonRepository.findByPerMail(mail));
-    }
-
 
     @Transactional
     public void registerNewPerson(RegisterDto person) {
@@ -72,7 +57,7 @@ public class ExpPersonService {
         ExpCountry personCountry = expCountryRepository.findById(person.countryId())
                 .orElseThrow(() -> new NotFoundException(MessageCode.NOT_FOUND.getCode(),
                         "Country not found by id",
-                        ExpPersonService.class.getName(),
+                        RegistrationService.class.getName(),
                         false));
 
         ExpPerson personSaved = saveNewPerson(person, decryptPassword, personCountry, tokenOnRegister);
@@ -100,7 +85,7 @@ public class ExpPersonService {
         ExpRole rol = expRoleRepository.findByRolName(role)
                 .orElseThrow(() -> new NotFoundException(MessageCode.NOT_FOUND.getCode(),
                         "Role " + role + " not found",
-                        ExpPersonService.class.getName(),
+                        RegistrationService.class.getName(),
                         false));
 
         ExpRolePerson rolePerson = new ExpRolePerson();

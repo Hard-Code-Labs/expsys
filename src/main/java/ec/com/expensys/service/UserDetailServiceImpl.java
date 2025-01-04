@@ -6,7 +6,7 @@ import ec.com.expensys.dto.LoginRequestDto;
 import ec.com.expensys.persistence.entity.ExpPerson;
 import ec.com.expensys.persistence.repository.ExpPersonRepository;
 import ec.com.expensys.security.JWTUtils;
-import ec.com.expensys.web.exception.MessageCode;
+import ec.com.expensys.web.utils.MessageCode;
 import ec.com.expensys.web.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -71,7 +71,7 @@ public class UserDetailServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        ExpPerson person = personRepository.findActiveByMail(username)
+        ExpPerson person = personRepository.findByPerMailAndIsEnabledTrueAndIsDeletedFalse(username)
                 .orElseThrow(() -> new NotFoundException(MessageCode.NOT_FOUND.getCode(),
                         "Person with mail " + username + " not found", UserDetailServiceImpl.class.getName(), false));
 

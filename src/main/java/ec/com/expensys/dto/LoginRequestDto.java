@@ -1,6 +1,6 @@
 package ec.com.expensys.dto;
 
-import ec.com.expensys.validator.Trimmed;
+import ec.com.expensys.handler.Trimmed;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 
