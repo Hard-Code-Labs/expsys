@@ -17,10 +17,4 @@ public class CategoryResolver {
 
     private final ExpPersonCategoryService personCategoryService;
 
-
-    @QueryMapping(name = "getAllCategoriesByPerson")
-    public List<PersonCategoryDto> findAllByPersonId(@Argument String perUUID) {
-        log.info("categories for person id {}", perUUID);
-        return personCategoryService.findCategoriesByPerson(perUUID);
-    }
 }

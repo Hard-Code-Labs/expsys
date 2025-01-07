@@ -1,0 +1,9 @@
+type Mutation {
+    createCategory(category: CategoryInput!): PersonCategory
+}
+
+input CategoryInput {
+    catName: String!
+    catType: TypeCategory!
+    catIcon: String!
+}
