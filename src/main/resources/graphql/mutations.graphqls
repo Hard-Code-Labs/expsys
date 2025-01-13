@@ -1,8 +1,9 @@
 type Mutation {
-    createCategory(category: CategoryInput!): PersonCategory
+    addCategory(category: CategoryInput!): PersonCategory!
 }
 
 input CategoryInput {
+    perUUID: ID!
     catName: String!
     catType: TypeCategory!
     catIcon: String!

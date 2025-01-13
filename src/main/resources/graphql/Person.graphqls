@@ -1,8 +1,0 @@
-type Person{
-    perUUID: ID!
-    perMail: String!
-    perName: String!
-    perLastname: String!
-    isEnabled: Boolean!
-    categories: [PersonCategory!]
-}

@@ -8,5 +8,6 @@ public record PersonCategoryDto(
         String catName,
         String catType,
         String catIcon,
-        Boolean isDeleted
+        Boolean isDeleted,
+        PersonDataDto person
 ) {}

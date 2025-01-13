@@ -41,7 +41,7 @@ Technologies used in the project:
 *   PostgreSQL 16
 * Docker
 * Flyway
-* GraphQL
+* GraphQL: Extended Scalars (https://github.com/tailrocks/graphql-java-datetime)
 
 ## License:
 

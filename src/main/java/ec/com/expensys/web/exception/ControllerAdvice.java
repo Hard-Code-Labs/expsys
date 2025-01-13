@@ -1,13 +1,11 @@
 package ec.com.expensys.web.exception;
 
 import ec.com.expensys.web.utils.MessageCode;
-import graphql.execution.DataFetcherExceptionHandlerResult;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.graphql.execution.DataFetcherExceptionResolver;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
@@ -118,19 +116,6 @@ public class ControllerAdvice {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<CustomResponse> handleGenericException(Exception ex, HttpServletRequest request) {
-
-        CustomResponse response = CustomResponse.builder()
-                .code(MessageCode.SERVER_ERROR.getCode())
-                .customMessage("An unexpected server error occurred")
-                .path(request.getRequestURI())
-                .details(Map.of("error", ex.getMessage()))
-                .build();
-
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
-    }
-
-
-    public ResponseEntity<CustomResponse> graphqlException(Exception ex, HttpServletRequest request) {
 
         CustomResponse response = CustomResponse.builder()
                 .code(MessageCode.SERVER_ERROR.getCode())
