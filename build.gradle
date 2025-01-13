@@ -41,6 +41,7 @@ dependencies {
     implementation 'org.flywaydb:flyway-core:10.15.2'
     implementation 'org.springframework.boot:spring-boot-starter-graphql'
     implementation 'com.graphql-java:graphql-java-extended-scalars:2023-01-24T02-11-56-babda5f'
+    implementation 'com.tailrocks.graphql:graphql-datetime-spring-boot-starter:6.0.0'
 
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
