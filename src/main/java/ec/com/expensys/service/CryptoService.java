@@ -19,8 +19,8 @@ import java.util.Base64;
 @Service
 public class CryptoService {
 
-    @Value("${constant.privateKeyPath}")
-    private String PRIVATE_KEY_PATH;
+    @Value("${constant.privateKey}")
+    private String PRIVATE_KEY;
 
     private PrivateKey pemPrivateKey;
 
@@ -28,7 +28,7 @@ public class CryptoService {
 
     @PostConstruct
     public void init() throws Exception{
-        pemPrivateKey = PEMUtils.loadPrivateKey(PRIVATE_KEY_PATH);
+        pemPrivateKey = PEMUtils.loadPrivateKey(PRIVATE_KEY);
     }
 
     public String decrypt(String encryptMsg) {
