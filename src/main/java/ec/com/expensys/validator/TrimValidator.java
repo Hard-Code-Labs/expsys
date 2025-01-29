@@ -5,13 +5,14 @@ import jakarta.validation.ConstraintValidatorContext;
 
 public class TrimValidator implements ConstraintValidator<Trimmed, String> {
 
+    private static final String VALID_PATTERN = "^\\S+$";
+
     @Override
     public boolean isValid(String s, ConstraintValidatorContext context) {
-        if(s == null){
+        if (s == null) {
             return true;
         }
 
-        String trimmedValue = s.trim();
-        return !trimmedValue.isEmpty() && trimmedValue.equals(s);
+        return s.matches(VALID_PATTERN);
     }
 }

@@ -7,10 +7,15 @@ import java.util.Base64;
 
 public class PEMUtils {
 
-    public static PrivateKey loadPrivateKey(String privateKeyPEM) throws Exception {
-        byte[] encoded = Base64.getDecoder().decode(privateKeyPEM);
-        PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(encoded);
-        KeyFactory keyFactory = KeyFactory.getInstance("RSA");
-        return keyFactory.generatePrivate(keySpec);
+    public static PrivateKey loadPrivateKey(String privateKeyPEM)  {
+        try {
+            byte[] encoded = Base64.getDecoder().decode(privateKeyPEM);
+            PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(encoded);
+            KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+            return keyFactory.generatePrivate(keySpec);
+        }
+        catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }
