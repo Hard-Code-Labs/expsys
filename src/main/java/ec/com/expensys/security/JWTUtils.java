@@ -28,6 +28,15 @@ public class JWTUtils {
     @Value("${security.jwt.issuer}")
     private String userGenerator;
 
+    @Value("${JWT_REFRESH_TIME}")
+    private long minutesRefreshToken;
+
+    @Value("${JWT_ACCESS_TIME}")
+    private long minutesAccessToken;
+
+    @Value("${JWT_ACCOUNT_VALIDATION_TIME}")
+    private long minutesAccountValidation;
+
     private Algorithm algorithm;
 
     @PostConstruct
@@ -40,7 +49,7 @@ public class JWTUtils {
                 .withIssuer(this.userGenerator)
                 .withSubject(mail)
                 .withIssuedAt(new Date())
-                .withExpiresAt(new Date(System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(30)))
+                .withExpiresAt(new Date(System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(this.minutesAccountValidation)))
                 .withJWTId(UUID.randomUUID().toString())
                 .withNotBefore(new Date(System.currentTimeMillis()))
                 .sign(algorithm);
@@ -59,7 +68,7 @@ public class JWTUtils {
                 .withSubject(username)
                 .withClaim("authorities",authorities)
                 .withIssuedAt(new Date())
-                .withExpiresAt(new Date(System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(2)))
+                .withExpiresAt(new Date(System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(this.minutesAccessToken)))
                 .withJWTId(UUID.randomUUID().toString())
                 .withNotBefore(new Date(System.currentTimeMillis()))
                 .sign(algorithm);
@@ -72,7 +81,7 @@ public class JWTUtils {
                 .withIssuer(this.userGenerator)
                 .withSubject(username)
                 .withIssuedAt(new Date())
-                .withExpiresAt(new Date(System.currentTimeMillis() + TimeUnit.DAYS.toMillis(10)))
+                .withExpiresAt(new Date(System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(this.minutesRefreshToken)))
                 .withJWTId(UUID.randomUUID().toString())
                 .withNotBefore(new Date(System.currentTimeMillis()))
                 .sign(algorithm);
