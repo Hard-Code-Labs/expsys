@@ -71,9 +71,18 @@ public class UserDetailServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        ExpPerson person = personRepository.findActiveByMail(username)
+
+        ExpPerson person = personRepository.findByPerMail(username)
                 .orElseThrow(() -> new NotFoundException(MessageCode.NOT_FOUND.getCode(),
                         "Person with mail " + username + " not found", UserDetailServiceImpl.class.getName(), false));
+
+        if (person.getIsDeleted()){
+            throw new UsernameNotFoundException("Account for email " + username + " has been deleted.");
+        }
+
+        if (!person.getIsEnabled()){
+            throw new UsernameNotFoundException("Account for email " + username + " has not been verified yet.");
+        }
 
         List<SimpleGrantedAuthority> authorities = new ArrayList<>();
         authorities.addAll(loadRoles(person));

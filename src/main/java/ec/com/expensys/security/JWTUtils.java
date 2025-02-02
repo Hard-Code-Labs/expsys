@@ -28,13 +28,13 @@ public class JWTUtils {
     @Value("${security.jwt.issuer}")
     private String userGenerator;
 
-    @Value("${JWT_REFRESH_TIME}")
+    @Value("${security.jwt.refreshTime}")
     private long minutesRefreshToken;
 
-    @Value("${JWT_ACCESS_TIME}")
+    @Value("${security.jwt.accessTime}")
     private long minutesAccessToken;
 
-    @Value("${JWT_ACCOUNT_VALIDATION_TIME}")
+    @Value("${security.jwt.accountValidationTime}")
     private long minutesAccountValidation;
 
     private Algorithm algorithm;
