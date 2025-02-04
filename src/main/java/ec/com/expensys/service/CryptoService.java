@@ -2,8 +2,7 @@ package ec.com.expensys.service;
 
 import ec.com.expensys.security.PEMUtils;
 import ec.com.expensys.web.exception.DecryptException;
-import ec.com.expensys.web.utils.MessageCode;
-import jakarta.annotation.PostConstruct;
+import ec.com.expensys.web.exception.MessageCode;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -19,19 +18,15 @@ import java.util.Base64;
 @Service
 public class CryptoService {
 
-    @Value("${constant.privateKeyPath}")
-    private String PRIVATE_KEY_PATH;
-
-    private PrivateKey pemPrivateKey;
+    @Value("${constant.privateKey}")
+    private String PRIVATE_KEY;
 
     public CryptoService() {}
 
-    @PostConstruct
-    public void init() throws Exception{
-        pemPrivateKey = PEMUtils.loadPrivateKey(PRIVATE_KEY_PATH);
-    }
-
     public String decrypt(String encryptMsg) {
+
+        PrivateKey pemPrivateKey = PEMUtils.loadPrivateKey(PRIVATE_KEY);
+
         try {
             Cipher cipher = Cipher.getInstance("RSA");
             cipher.init(Cipher.DECRYPT_MODE, pemPrivateKey);
@@ -40,7 +35,8 @@ public class CryptoService {
 
             return new String(decryptedMessage);
 
-        }catch (NoSuchPaddingException | NoSuchAlgorithmException | InvalidKeyException |
+        }
+        catch (NoSuchPaddingException | NoSuchAlgorithmException | InvalidKeyException |
                 IllegalBlockSizeException | BadPaddingException | IllegalArgumentException e){
 
             throw new DecryptException(MessageCode.DECRYPT_ERROR.getCode(),
@@ -48,6 +44,9 @@ public class CryptoService {
                     CryptoService.class.getName(),
                     true,
                     e.getLocalizedMessage());
+        }
+        catch (Exception e) {
+            throw new RuntimeException(e.getLocalizedMessage());
         }
     }
 }

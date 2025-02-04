@@ -13,7 +13,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Trimmed {
 
-    String message() default "Field cannot start or end with a white space";
+    String message() default "Field does not allow spaces.";
 
     Class<?>[] groups() default {};
 

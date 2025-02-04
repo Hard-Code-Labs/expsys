@@ -28,6 +28,15 @@ public class JWTUtils {
     @Value("${security.jwt.issuer}")
     private String userGenerator;
 
+    @Value("${security.jwt.refreshTime}")
+    private long minutesRefreshToken;
+
+    @Value("${security.jwt.accessTime}")
+    private long minutesAccessToken;
+
+    @Value("${security.jwt.accountValidationTime}")
+    private long minutesAccountValidation;
+
     private Algorithm algorithm;
 
     @PostConstruct
@@ -40,7 +49,7 @@ public class JWTUtils {
                 .withIssuer(this.userGenerator)
                 .withSubject(mail)
                 .withIssuedAt(new Date())
-                .withExpiresAt(new Date(System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(30)))
+                .withExpiresAt(new Date(System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(this.minutesAccountValidation)))
                 .withJWTId(UUID.randomUUID().toString())
                 .withNotBefore(new Date(System.currentTimeMillis()))
                 .sign(algorithm);
@@ -59,7 +68,7 @@ public class JWTUtils {
                 .withSubject(username)
                 .withClaim("authorities",authorities)
                 .withIssuedAt(new Date())
-                .withExpiresAt(new Date(System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(2)))
+                .withExpiresAt(new Date(System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(this.minutesAccessToken)))
                 .withJWTId(UUID.randomUUID().toString())
                 .withNotBefore(new Date(System.currentTimeMillis()))
                 .sign(algorithm);
@@ -72,7 +81,7 @@ public class JWTUtils {
                 .withIssuer(this.userGenerator)
                 .withSubject(username)
                 .withIssuedAt(new Date())
-                .withExpiresAt(new Date(System.currentTimeMillis() + TimeUnit.DAYS.toMillis(10)))
+                .withExpiresAt(new Date(System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(this.minutesRefreshToken)))
                 .withJWTId(UUID.randomUUID().toString())
                 .withNotBefore(new Date(System.currentTimeMillis()))
                 .sign(algorithm);
@@ -88,7 +97,7 @@ public class JWTUtils {
         }
         catch (JWTVerificationException ex) {
             throw new InvalidTokenException(
-                    "Token is invalid.",
+                    "Error on decode JWT token.",
                     JWTUtils.class.getName(),
                     true,
                     ex.getLocalizedMessage());

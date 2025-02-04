@@ -10,6 +10,7 @@ import ec.com.expensys.web.utils.MessageCode;
 import ec.com.expensys.web.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -30,9 +31,16 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserDetailServiceImpl implements UserDetailsService {
 
-    private final JWTUtils jwtUtils;
+    private final TokenRedisManagerService tokenRedisManagerService;
     private final ExpPersonRepository personRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JWTUtils jwtUtils;
+
+    @Value("${security.jwt.refreshTime}")
+    private long minutesRefreshToken;
+
+    @Value("${security.jwt.accessTime}")
+    private long minutesAccessToken;
 
     public TokenResponseDto getTokenToLoginUser(LoginRequestDto loginRequestDto) {
         Authentication authentication = authenticate(loginRequestDto);
@@ -40,6 +48,9 @@ public class UserDetailServiceImpl implements UserDetailsService {
 
         String accessToken = jwtUtils.getNewAccessToken(authentication);
         String refreshToken = jwtUtils.getNewRefreshToken(authentication);
+
+        saveTokenOnRedis(accessToken,minutesAccessToken);
+        saveTokenOnRedis(refreshToken,minutesRefreshToken);
 
         return new TokenResponseDto(accessToken, refreshToken);
     }
@@ -55,7 +66,14 @@ public class UserDetailServiceImpl implements UserDetailsService {
         String accessToken = jwtUtils.getNewAccessToken(userAuthenticated);
         String refreshToken = jwtUtils.getNewRefreshToken(userAuthenticated);
 
+        saveTokenOnRedis(accessToken,minutesAccessToken);
+        saveTokenOnRedis(refreshToken,minutesRefreshToken);
+
         return new TokenResponseDto(accessToken, refreshToken);
+    }
+
+    private void saveTokenOnRedis(String token, Long ttl) {
+        this.tokenRedisManagerService.saveToken(token,ttl);
     }
 
 
@@ -71,9 +89,18 @@ public class UserDetailServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        ExpPerson person = personRepository.findByPerMailAndIsEnabledTrueAndIsDeletedFalse(username)
+
+        ExpPerson person = personRepository.findByPerMail(username)
                 .orElseThrow(() -> new NotFoundException(MessageCode.NOT_FOUND.getCode(),
                         "Person with mail " + username + " not found", UserDetailServiceImpl.class.getName(), false));
+
+        if (person.getIsDeleted()){
+            throw new UsernameNotFoundException("Account for email " + username + " has been deleted.");
+        }
+
+        if (!person.getIsEnabled()){
+            throw new UsernameNotFoundException("Account for email " + username + " has not been verified yet.");
+        }
 
         List<SimpleGrantedAuthority> authorities = new ArrayList<>();
         authorities.addAll(loadRoles(person));
