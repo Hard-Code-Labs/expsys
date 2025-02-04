@@ -3,7 +3,6 @@ package ec.com.expensys.security;
 import ec.com.expensys.service.UserDetailServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -36,7 +35,7 @@ import java.util.Arrays;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final JWTUtils jwtUtils;
+    private final JWTValidationFilter jwtValidationFilter;
 
     // Configuracion explicita sin anotaciones del @EnableMethodSecurity
 //    @Bean
@@ -69,7 +68,7 @@ public class SecurityConfig {
                     .csrf(AbstractHttpConfigurer::disable)
                     .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                     .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-                    .addFilterBefore(new JWTValidationFilter(jwtUtils), BasicAuthenticationFilter.class)
+                    .addFilterBefore(jwtValidationFilter, BasicAuthenticationFilter.class)
                     .build();
     }
 

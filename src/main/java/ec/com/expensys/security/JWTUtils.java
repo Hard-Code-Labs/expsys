@@ -97,7 +97,7 @@ public class JWTUtils {
         }
         catch (JWTVerificationException ex) {
             throw new InvalidTokenException(
-                    "Token is invalid.",
+                    "Error on decode JWT token.",
                     JWTUtils.class.getName(),
                     true,
                     ex.getLocalizedMessage());
