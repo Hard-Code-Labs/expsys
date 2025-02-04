@@ -7,6 +7,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -59,6 +61,26 @@ public class ControllerAdvice {
                 .build();
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<CustomResponse> handleAccessDeniedException(AccessDeniedException ex, HttpServletRequest request) {
+        CustomResponse response = CustomResponse.builder()
+                .code(MessageCode.FORBIDDEN.getCode())
+                .customMessage("Access denied: " + ex.getMessage())
+                .path(request.getRequestURI())
+                .build();
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
+    }
+
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<CustomResponse> handleAuthenticationException(AuthenticationException ex, HttpServletRequest request) {
+        CustomResponse response = CustomResponse.builder()
+                .code(MessageCode.UNAUTHORIZED.getCode())
+                .customMessage("Authentication failed: " + ex.getMessage())
+                .path(request.getRequestURI())
+                .build();
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)

@@ -19,6 +19,8 @@ CREATE SEQUENCE exp.exp_country_sq START WITH 1 INCREMENT 1;
 CREATE SEQUENCE exp.exp_role_person_sq START WITH 1 INCREMENT 1;
 CREATE SEQUENCE exp.exp_person_sq START WITH 1 INCREMENT 1;
 CREATE SEQUENCE exp.exp_role_sq START WITH 1 INCREMENT 1;
+CREATE SEQUENCE exp.exp_permission_sq START WITH 1 INCREMENT 1;
+CREATE SEQUENCE exp.exp_role_permission_sq START WITH 1 INCREMENT 1;
 
 CREATE TABLE exp.exp_country (
  ctr_id INTEGER NOT NULL DEFAULT nextval('exp.exp_country_sq') PRIMARY KEY,
@@ -70,6 +72,25 @@ CREATE TABLE exp.exp_role_person (
   is_delete BOOLEAN NOT NULL DEFAULT false,
   FOREIGN KEY (rol_id) REFERENCES exp.exp_role (rol_id),
   FOREIGN KEY (per_id) REFERENCES exp.exp_person (per_id)
+);
+
+CREATE TABLE exp.exp_permission(
+    prm_id INTEGER NOT NULL DEFAULT nextval('exp.exp_permission_sq') PRIMARY KEY,
+    prm_name VARCHAR NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    modified_at TIMESTAMP,
+    is_delete BOOLEAN NOT NULL DEFAULT false
+);
+
+CREATE TABLE exp.exp_role_permission(
+    rpe_id INTEGER NOT NULL DEFAULT nextval('exp.exp_role_permission_sq') PRIMARY KEY,
+    prm_id INTEGER NOT NULL,
+    rol_id INTEGER NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    modified_at TIMESTAMP,
+    is_delete BOOLEAN NOT NULL DEFAULT false,
+    FOREIGN KEY (prm_id) REFERENCES exp.exp_permission,
+    FOREIGN KEY (rol_id) REFERENCES exp.exp_role
 );
 
 CREATE TABLE exp.exp_person_category (

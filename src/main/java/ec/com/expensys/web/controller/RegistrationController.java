@@ -4,7 +4,7 @@ import com.auth0.jwt.exceptions.TokenExpiredException;
 import ec.com.expensys.security.JWTUtils;
 import ec.com.expensys.persistence.entity.ExpPerson;
 import ec.com.expensys.service.ExpPersonService;
-import ec.com.expensys.dto.RegistrationToken;
+import ec.com.expensys.dto.TokenRequest;
 import ec.com.expensys.web.exception.*;
 import ec.com.expensys.dto.RegisterDto;
 import io.swagger.v3.oas.annotations.Operation;
@@ -13,24 +13,23 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
+@RequiredArgsConstructor
+@PreAuthorize("permitAll()")
 @RequestMapping("/v1/register")
 @Tag(name = "Registration", description = "Endpoint for register new users.")
 public class RegistrationController {
 
     private final ExpPersonService personService;
     private final JWTUtils jwtUtils;
-
-    public RegistrationController(ExpPersonService personService, JWTUtils jwtUtils) {
-        this.personService = personService;
-        this.jwtUtils = jwtUtils;
-    }
 
     @Operation(
             summary = "Register new user",
@@ -82,7 +81,7 @@ public class RegistrationController {
                     description = "Validate person code",
                     required = true,
                     content = @Content(
-                            schema = @Schema(implementation = RegistrationToken.class)
+                            schema = @Schema(implementation = TokenRequest.class)
                     )
             ),
             responses = {
@@ -105,9 +104,9 @@ public class RegistrationController {
             }
     )
     @PostMapping(path = "/confirmation")
-    public ResponseEntity<?> confirmRegistration(@Valid @RequestBody RegistrationToken registrationToken) {
+    public ResponseEntity<?> confirmRegistration(@Valid @RequestBody TokenRequest tokenRequest) {
 
-        ExpPerson person = personService.findByPerVerificationCode(registrationToken.verificationCode())
+        ExpPerson person = personService.findByPerVerificationCode(tokenRequest.token())
                 .orElseThrow(() -> new NotFoundException(MessageCode.NOT_FOUND.getCode(),
                         "Verification code not found. User has been removed from the database. Please register again",
                         RegistrationController.class.getName(),
@@ -119,7 +118,7 @@ public class RegistrationController {
                     RegistrationController.class.getName());
         }else{
             try {
-                jwtUtils.validateToken(person.getPerVerificationCode());
+                jwtUtils.verifyToken(person.getPerVerificationCode());
             } catch (TokenExpiredException e) {
 
                 personService.deletePerson(person);

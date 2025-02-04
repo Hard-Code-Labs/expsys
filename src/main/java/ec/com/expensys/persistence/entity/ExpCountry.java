@@ -4,18 +4,18 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.io.Serializable;
-
 @Entity
 @Getter
 @Setter
 @Table(name = "exp_country",schema = "exp")
-@SequenceGenerator(name = "exp_country_sq", sequenceName = "exp_country_sq", allocationSize = 1)
-public class ExpCountry extends AuditableEntity implements Serializable {
+public class ExpCountry extends AuditableEntity {
+
+    private static final String SEQUENCE_NAME = "exp_country_sq";
 
     @Id
     @Column(name = "ctr_id", nullable = false)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "exp_country_sq")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = SEQUENCE_NAME)
+    @SequenceGenerator(name = SEQUENCE_NAME, sequenceName = SEQUENCE_NAME, allocationSize = 1)
     private Long ctrId;
 
     @Column(name = "ctr_acronym", length = 5,unique = true)

@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public interface ExpPersonRepository extends ListCrudRepository<ExpPerson, Long> {
 
-    ExpPerson findByPerMail(String perMail);
     Optional<ExpPerson> findByPerVerificationCode(String perVerificationCode);
 
+    Optional<ExpPerson> findByPerMail(String mail);
 }

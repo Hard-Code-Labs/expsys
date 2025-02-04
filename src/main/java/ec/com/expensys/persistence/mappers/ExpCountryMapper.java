@@ -7,7 +7,6 @@ import org.mapstruct.MappingConstants;
 import java.util.List;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
-
 public interface ExpCountryMapper {
 
     List<CountryDto> toCountriesDto(List<ExpCountry> expCountries);

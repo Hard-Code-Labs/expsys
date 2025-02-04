@@ -7,10 +7,11 @@ import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @MappedSuperclass
-public class AuditableEntity {
+public class AuditableEntity implements Serializable {
 
     @CreatedDate
     @Column(name = "created_at")

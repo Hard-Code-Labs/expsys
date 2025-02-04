@@ -1,15 +1,10 @@
-version: '3.9'
-
 services:
   expsysapp:
     image: hardcodelabs/hardcodelabs:expsys-0.0.1
     container_name: expsysdev
     restart: always
-    environment:
-      SPRING_PROFILES_ACTIVE: dev
-      VIRTUAL_POSTGRES_URL: jdbc:postgresql://virtual_postgres:5432/xisdb
-      VIRTUAL_POSTGRES_NAME: exp
-      VIRTUAL_POSTGRES_PASSWORD: expdev@hardcodelabs
+    env_file:
+      - .env
     ports:
       - "8080:8080"
     networks:

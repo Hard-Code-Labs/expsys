@@ -20,6 +20,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -35,7 +36,7 @@ public class ExpPersonService {
 
     private final ExpRolePersonRepository expRolePersonRepository;
     private final ExpCountryRepository expCountryRepository;
-    private final ExpPersonRepository expPersonRepository;
+    private final ExpPersonRepository personRepository;
     private final ExpRoleRepository expRoleRepository;
     private final PasswordEncoder passwordEncoder;
 
@@ -48,30 +49,33 @@ public class ExpPersonService {
 
 
     public List<PersonDto> findAll() {
-        List<ExpPerson> result = expPersonRepository.findAll();
+        List<ExpPerson> result = personRepository.findAll();
         return expPersonMapper.toPersonsDto(result);
     }
 
 
     @Transactional
-    public void registerNewPerson(RegisterDto person) {
+    public void registerNewPerson(RegisterDto registerDto) {
 
-        if (expPersonRepository.findByPerMail(person.perMail()) != null) {
+        ExpPerson person = personRepository.findByPerMail(registerDto.perMail().toLowerCase())
+                .orElse(null);
+
+        if (person != null) {
             throw new DuplicateException(MessageCode.ALREADY_EXIST.getCode(),
                     "Email already exists.",
                     ExpPerson.class.getName());
         }
 
-        String decryptPassword = cryptoService.decrypt(person.perPassword());
-        String tokenOnRegister = jwtUtils.createOnRegister(person.perMail());
+        String decryptPassword = cryptoService.decrypt(registerDto.perPassword());
+        String tokenOnRegister = jwtUtils.getNewTokenOnRegister(registerDto.perMail().toLowerCase());
 
-        ExpCountry personCountry = expCountryRepository.findById(person.countryId())
+        ExpCountry personCountry = expCountryRepository.findById(registerDto.countryId())
                 .orElseThrow(() -> new NotFoundException(MessageCode.NOT_FOUND.getCode(),
                         "Country not found by id",
                         ExpPersonService.class.getName(),
                         false));
 
-        ExpPerson personSaved = saveNewPerson(person, decryptPassword, personCountry, tokenOnRegister);
+        ExpPerson personSaved = saveNewPerson(registerDto, decryptPassword, personCountry, tokenOnRegister);
 
         saveNewRolePerson(RoleEnum.BASIC, personSaved);
 
@@ -81,7 +85,7 @@ public class ExpPersonService {
     private ExpPerson saveNewPerson(RegisterDto person, String password, ExpCountry country, String tokenOnRegister) {
         ExpPerson personToSave = new ExpPerson();
         personToSave.setPerUUID(UUID.randomUUID());
-        personToSave.setPerMail(person.perMail());
+        personToSave.setPerMail(person.perMail().toLowerCase());
         personToSave.setPerName(person.perName());
         personToSave.setPerLastname(person.perLastname());
         personToSave.setPerPassword(passwordEncoder.encode(password));
@@ -89,7 +93,7 @@ public class ExpPersonService {
         personToSave.setExpCountry(country);
         personToSave.setPerVerificationCode(tokenOnRegister);
 
-        return expPersonRepository.save(personToSave);
+        return personRepository.save(personToSave);
     }
 
     private void saveNewRolePerson(RoleEnum role, ExpPerson personSaved) {
@@ -131,16 +135,16 @@ public class ExpPersonService {
     }
 
     public Optional<ExpPerson> findByPerVerificationCode(String verificationCode) {
-        return expPersonRepository.findByPerVerificationCode(verificationCode);
+        return personRepository.findByPerVerificationCode(verificationCode);
     }
 
     public void newPersonEnabled(ExpPerson personUpdated) {
         personUpdated.setIsEnabled(true);
-        expPersonRepository.save(personUpdated);
+        personRepository.save(personUpdated);
     }
 
     public void deletePerson(ExpPerson personToDelete) {
-        expPersonRepository.delete(personToDelete);
+        personRepository.delete(personToDelete);
     }
 }
 

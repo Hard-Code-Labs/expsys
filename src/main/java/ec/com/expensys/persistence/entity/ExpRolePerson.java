@@ -4,19 +4,20 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.io.Serializable;
 import java.time.LocalDate;
 
 @Entity
 @Getter
 @Setter
 @Table(name = "exp_role_person", schema = "exp")
-@SequenceGenerator(name = "exp_role_person_sq", sequenceName = "exp_role_person_sq", allocationSize = 1)
-public class ExpRolePerson extends AuditableEntity implements Serializable {
+public class ExpRolePerson extends AuditableEntity {
+
+    private static final String SEQUENCE_NAME = "exp_role_person_sq";
 
     @Id
     @Column(name = "rop_id", nullable = false)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "exp_role_person_sq")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = SEQUENCE_NAME)
+    @SequenceGenerator(name = SEQUENCE_NAME, sequenceName = SEQUENCE_NAME, allocationSize = 1)
     private Long ropId;
 
     @Column(name = "rop_active", nullable = false)
@@ -28,7 +29,7 @@ public class ExpRolePerson extends AuditableEntity implements Serializable {
     @Column(name = "rop_end_date", columnDefinition = "timestamp")
     private LocalDate ropEndDate;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "rol_id", referencedColumnName = "rol_id")
     private ExpRole expRole;
 
@@ -37,4 +38,12 @@ public class ExpRolePerson extends AuditableEntity implements Serializable {
     private ExpPerson expPerson;
 
     public ExpRolePerson() {}
+
+    @Override
+    public String toString() {
+        return "ExpRolePerson{" +
+                "ropId=" + ropId +
+                ", ropActive=" + ropActive +
+                '}';
+    }
 }

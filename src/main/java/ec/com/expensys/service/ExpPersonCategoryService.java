@@ -1,18 +1,14 @@
 package ec.com.expensys.service;
 
 import ec.com.expensys.persistence.repository.ExpPersonCategoryRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 
 @Service
+@RequiredArgsConstructor
 public class ExpPersonCategoryService {
 
     private final ExpPersonCategoryRepository expPersonCategoryRepository;
-
-    @Autowired
-    public ExpPersonCategoryService(ExpPersonCategoryRepository expPersonCategoryRepository) {
-        this.expPersonCategoryRepository = expPersonCategoryRepository;
-    }
 
 }

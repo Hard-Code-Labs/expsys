@@ -12,6 +12,8 @@ public enum MessageCode {
     SEND_MAIL_ERROR(4005,"Error on sending mail."),
     TOKEN_EXPIRED(4006,"Token expired."),
     TOKEN_INVALID(4007,"Error on processing token."),
+    UNAUTHORIZED(4008,"Not authorized."),
+    FORBIDDEN(4009,"Access denied."),
     CREATED(2001,"Created."),
     SUCCESS(2000,"Success."),
     SERVER_ERROR(5000,"Server internal error."),
