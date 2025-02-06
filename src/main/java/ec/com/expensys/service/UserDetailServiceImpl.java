@@ -50,8 +50,8 @@ public class UserDetailServiceImpl implements UserDetailsService {
         String accessToken = jwtUtils.getNewAccessToken(authentication);
         String refreshToken = jwtUtils.getNewRefreshToken(authentication);
 
-        saveTokenOnRedis(accessToken,minutesAccessToken);
-        saveTokenOnRedis(refreshToken,minutesRefreshToken);
+        saveTokenOnRedis(accessToken,loginRequestDto.username(),minutesAccessToken);
+        saveTokenOnRedis(refreshToken,loginRequestDto.username(),minutesRefreshToken);
 
         return new TokenResponseDto(accessToken, refreshToken);
     }
@@ -70,14 +70,14 @@ public class UserDetailServiceImpl implements UserDetailsService {
         String accessToken = jwtUtils.getNewAccessToken(userAuthenticated);
         String refreshToken = jwtUtils.getNewRefreshToken(userAuthenticated);
 
-        saveTokenOnRedis(accessToken,minutesAccessToken);
-        saveTokenOnRedis(refreshToken,minutesRefreshToken);
+        saveTokenOnRedis(accessToken,username,minutesAccessToken);
+        saveTokenOnRedis(refreshToken,username,minutesRefreshToken);
 
         return new TokenResponseDto(accessToken, refreshToken);
     }
 
-    private void saveTokenOnRedis(String token, Long ttl) {
-        this.tokenRedisManagerService.saveToken(token,ttl);
+    private void saveTokenOnRedis(String token, String username, Long ttl) {
+        this.tokenRedisManagerService.saveToken(token,username,ttl);
     }
 
     private void deleteTokenFromRedis(String token) {

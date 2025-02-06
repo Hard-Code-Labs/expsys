@@ -14,9 +14,8 @@ public class TokenRedisManagerService {
         this.redisTemplate = redisTemplate;
     }
 
-    public void saveToken(String token, Long TTLminutes){
-        String ACTIVE = "A";
-        redisTemplate.opsForValue().set(token, ACTIVE, TTLminutes, TimeUnit.MINUTES);
+    public void saveToken(String token, String username, Long TTLminutes){
+        redisTemplate.opsForValue().set(token, username, TTLminutes, TimeUnit.MINUTES);
     }
 
     public void deleteToken(String token){
