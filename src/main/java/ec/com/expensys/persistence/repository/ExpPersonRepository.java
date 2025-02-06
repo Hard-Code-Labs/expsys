@@ -10,6 +10,8 @@ import java.util.UUID;
 
 public interface ExpPersonRepository extends ListCrudRepository<ExpPerson, Long> {
 
+    Optional<ExpPerson> findByPerMailAndIsEnabledTrueAndIsDeletedFalse(String email);
+
     Optional<ExpPerson> findByPerVerificationCode(String perVerificationCode);
 
     Optional<ExpPerson> findByPerMail(String mail);

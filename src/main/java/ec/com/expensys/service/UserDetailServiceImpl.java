@@ -1,6 +1,7 @@
 package ec.com.expensys.service;
 
 import com.auth0.jwt.interfaces.DecodedJWT;
+import ec.com.expensys.dto.TokenRequest;
 import ec.com.expensys.dto.TokenResponseDto;
 import ec.com.expensys.dto.LoginRequestDto;
 import ec.com.expensys.persistence.entity.ExpPerson;
@@ -55,12 +56,15 @@ public class UserDetailServiceImpl implements UserDetailsService {
         return new TokenResponseDto(accessToken, refreshToken);
     }
 
-    public TokenResponseDto refreshToken(String tokenToRefresh) {
-        DecodedJWT decodedJWT = jwtUtils.verifyToken(tokenToRefresh);
+    public TokenResponseDto refreshToken(TokenRequest tokenRequest) {
+        DecodedJWT decodedJWT = jwtUtils.verifyToken(tokenRequest.refreshToken());
         String username = jwtUtils.getUsernameFromToken(decodedJWT);
 
         UserDetails userDetail = loadUserByUsername(username);
         Authentication userAuthenticated = new UsernamePasswordAuthenticationToken(userDetail, userDetail.getPassword(), userDetail.getAuthorities());
+
+        deleteTokenFromRedis(tokenRequest.refreshToken());
+        deleteTokenFromRedis(tokenRequest.accessToken());
 
         SecurityContextHolder.getContext().setAuthentication(userAuthenticated);
         String accessToken = jwtUtils.getNewAccessToken(userAuthenticated);
@@ -76,6 +80,9 @@ public class UserDetailServiceImpl implements UserDetailsService {
         this.tokenRedisManagerService.saveToken(token,ttl);
     }
 
+    private void deleteTokenFromRedis(String token) {
+        this.tokenRedisManagerService.deleteToken(token);
+    }
 
     private Authentication authenticate(LoginRequestDto loginRequestDto) {
         UserDetails userDetail = loadUserByUsername(loginRequestDto.username());

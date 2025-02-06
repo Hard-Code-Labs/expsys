@@ -14,7 +14,11 @@ public interface ExpPersonCategoryMapper {
 
     @InheritInverseConfiguration
     @Mapping(target = "expPerson", ignore = true)
+    @Mapping(target = "isDeleted", ignore = true)
+    @Mapping(target = "catId", ignore = true)
     ExpPersonCategory toExpPersonCategory(CategoryInputDto categoryInput);
 
+    @Mapping(target = "person", ignore = true)
+    @Mapping(target = "catId", ignore = true)
     PersonCategoryDto toExpPersonCategoryDto(ExpPersonCategory personCategory);
 }

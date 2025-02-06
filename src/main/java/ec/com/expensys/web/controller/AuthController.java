@@ -31,15 +31,16 @@ public class AuthController {
 
     @PostMapping("/refresh")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<TokenResponseDto> refresh(@Valid @RequestBody TokenRequest tokenToRefresh){
+    public ResponseEntity<TokenResponseDto> refresh(@Valid @RequestBody TokenRequest tokenRequest){
         return ResponseEntity.status(HttpStatus.OK)
-                .body(userDetailService.refreshToken(tokenToRefresh.token()));
+                .body(userDetailService.refreshToken(tokenRequest));
     }
 
     @PostMapping("/logout")
-    @PreAuthorize("permitAll()")
-    public ResponseEntity<?> logout(@Valid @RequestBody TokenRequest tokenToDelete){
-        tokenRedisManagerService.deleteToken(tokenToDelete.token());
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<?> logout(@Valid @RequestBody TokenRequest tokenRequest){
+        tokenRedisManagerService.deleteToken(tokenRequest.accessToken());
+        tokenRedisManagerService.deleteToken(tokenRequest.refreshToken());
         return ResponseEntity.ok().build();
     }
 }

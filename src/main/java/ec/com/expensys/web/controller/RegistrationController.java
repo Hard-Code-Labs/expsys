@@ -1,6 +1,7 @@
 package ec.com.expensys.web.controller;
 
 import com.auth0.jwt.exceptions.TokenExpiredException;
+import ec.com.expensys.dto.OneTimeToken;
 import ec.com.expensys.security.JWTUtils;
 import ec.com.expensys.persistence.entity.ExpPerson;
 import ec.com.expensys.service.RegistrationService;
@@ -107,9 +108,9 @@ public class RegistrationController {
     )
     @PostMapping(path = "/confirmation")
     @Transactional
-    public ResponseEntity<?> confirmRegistration(@Valid @RequestBody TokenRequest tokenRequest) {
+    public ResponseEntity<?> confirmRegistration(@Valid @RequestBody OneTimeToken token) {
 
-        ExpPerson person = personService.findByPerVerificationCode(tokenRequest.token())
+        ExpPerson person = personService.findByPerVerificationCode(token.token())
                 .orElseThrow(() -> new NotFoundException(MessageCode.NOT_FOUND.getCode(),
                         "Verification code not found. User has been removed from the database. Please register again",
                         RegistrationController.class.getName(),
