@@ -1,6 +1,6 @@
 services:
   expsysapp:
-    image: hardcodelabs/hardcodelabs:expsys-0.0.1
+    image: hardcodelabs/hardcodelabs:expsys-0.0.2
     container_name: expsysdev
     restart: always
     env_file:
