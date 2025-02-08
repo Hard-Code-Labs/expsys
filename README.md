@@ -40,9 +40,9 @@ Technologies used in the project:
 *   Springboot 3.5
 *   PostgreSQL 16
 
-## License:
+## License
 
-> This project is licensed under the GPL License
+This project is **private and proprietary**. Unauthorized copying, modification, or distribution of the code is strictly prohibited. All rights reserved © 2025 HardCode Labs.
 
 ## Author
 
