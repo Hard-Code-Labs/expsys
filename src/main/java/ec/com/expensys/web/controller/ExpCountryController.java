@@ -14,7 +14,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @PreAuthorize("permitAll()")
-@RequestMapping("/countries")
+@RequestMapping("/v1/countries")
 public class ExpCountryController {
 
     private final ExpCountryService expCountryService;
