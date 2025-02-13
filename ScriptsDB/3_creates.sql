@@ -125,6 +125,21 @@ COMMENT ON COLUMN exp.exp_transaction.trn_month_reference IS 'Month of reference
 
 COMMENT ON COLUMN exp.exp_person_category.cat_type IS 'Type: I=Income E=Expense';
 
+--Para AUDITORIA
+CREATE TABLE exp.exp_person_audit (
+  audit_id SERIAL PRIMARY KEY,
+  per_id INTEGER NOT NULL,
+  old_email VARCHAR(100),
+  new_email VARCHAR(100),
+  changed_at TIMESTAMP DEFAULT NOW(),
+  changed_by VARCHAR(50),
+  old_enabled BOOLEAN,
+  new_enabled BOOLEAN,
+  old_country INTEGER,
+  new_country INTEGER,
+  password_changed BOOLEAN DEFAULT FALSE -- Solo indica si hubo cambio de contraseña
+);
+
 
 --Para FLYWAY
 create table exp.flyway_schema_history
